@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-<Fill in: what this project does, who/what it's for (personal tool, library, service, ...), and any hard
+**[TODO]** Fill in: what this project does, who/what it's for (personal tool, library, service, ...), and any hard
 invariants that must not be silently changed — e.g. "read-only, never sends/writes", "no network calls",
 "single-user, no auth". State them as deliberate design decisions, not just current behavior, so a future
-change doesn't casually cross them.>
+change doesn't casually cross them.
 
 ## Commands
 
@@ -20,13 +20,13 @@ installed) — there is no separate environment bootstrap step to run first, unl
 - Run the CLI: `gradlew run --args="<command> [args]"` — or `java -jar build/libs/<name>-<version>.jar <command>
   [args]` after `gradlew build`
 - Run the test suite only: `gradlew test`
-- <Add any other project-specific commands here.>
+- **[TODO]** Add any other project-specific commands here.
 
 ## Architecture
 
-<Describe the packages and what each one owns — one paragraph per package is usually enough. Name it, state
+**[TODO]** Describe the packages and what each one owns — one paragraph per package is usually enough. Name it, state
 its one job, and flag anything a future change needs to respect (e.g. "the only place that parses X", "must
-stay pure/dependency-free so it's testable without live credentials").>
+stay pure/dependency-free so it's testable without live credentials").
 
 ## Development Guidelines
 
@@ -39,7 +39,7 @@ These apply to every project scaffolded from this template, not just this one:
 - Favour simplicity over ingenuity. Keep things as simple as possible for what's actually needed today — don't
   design for hypothetical future requirements. Stay a single Gradle project as long as that's true; only split
   into a multi-project build (with a `buildSrc` convention plugin sharing the toolchain/test setup across
-  subprojects — see `hinolugi-counters/buildSrc` for a worked example) once there's a real second module.
+  subprojects) once there's a real second module.
 - Minimize third-party dependencies. The JDK and JUnit are enough to start; add a dependency only when it
   earns its ongoing maintenance cost.
 - Make it easy to get started: a clone + `. .\setup.ps1` (or `gradlew build`) should be enough to get a
@@ -60,14 +60,12 @@ These apply to every project scaffolded from this template, not just this one:
   (design notes, detailed plans, investigation write-ups) belongs under `docs/` instead.
 - Keep `README.md`'s setup/usage/layout sections in sync with the code as it evolves — treat drift there as a
   bug, not a documentation nice-to-have.
-- Style guide: 2-space indentation (never tabs), UTF-8, LF line endings everywhere — matching the style
-  actually used across `hinolugi-counters`' Java code, not the 4-space convention common elsewhere. Enforced by
-  `.editorconfig`; don't let it drift from these numbers.
+- Style guide: 2-space indentation (never tabs), UTF-8, LF line endings everywhere. Enforced by `.editorconfig`;
+  don't let it drift from these numbers.
 - The version is stamped into the jar manifest (`build.gradle`'s `jar { manifest { ... } }`) and read back at
   runtime via `Package.getImplementationVersion()` (`Cli.java`'s `version()`, with a `"0.0.0+unknown"` fallback
   for when running from compiled classes rather than a jar, e.g. `gradlew run` or the test suite) rather than
   hardcoded, so `build.gradle`'s `version` stays the single source of truth — mirrors
-  the Python template's `importlib.metadata.version(...)` approach; deliberately not a second
-  hand-maintained constant, which is exactly the kind of thing that drifts.
-- <Add project-specific invariants/conventions here as they emerge — things a future change must not casually
-  break.>
+  a second hand-maintained constant, which is exactly the kind of thing that drifts.
+- **[TODO]** Add project-specific invariants/conventions here as they emerge — things a future change must not
+  casually break.
