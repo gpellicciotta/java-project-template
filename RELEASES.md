@@ -2,6 +2,12 @@
 
 All notes will be in reverse chronological order.
 
+## 2026-08-19 v0.2.0
+- `version` command now prints `{project name} {version} - Copyright Giovanni Pellicciotta` instead of just
+  the bare version number. The project name is read from the jar manifest's `Implementation-Title`
+  (`Cli.java`'s new `name()`, mirroring `version()`'s `Implementation-Version` lookup), falling back to
+  `"template-project"` when run from compiled classes rather than a jar.
+
 ## 2026-08-19 v0.1.0
 - First working version of the template: a minimal Gradle/Java project (`src/main/java`+`src/test/java`
   layout, JUnit 5, the Gradle wrapper with a pinned toolchain JDK) plus the `RELEASES.md`/`TODO.md`/`CLAUDE.md`

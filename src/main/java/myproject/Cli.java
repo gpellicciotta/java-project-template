@@ -21,6 +21,13 @@ public final class Cli
       ""
   );
 
+  public static String name() {
+    String n = Cli.class.getPackage().getImplementationTitle();
+    // Same jar-manifest-only caveat as version() below: Implementation-Title only resolves when running from
+    // the built jar, not when running compiled classes directly (e.g. `gradlew run` or the test suite).
+    return (n != null) ? n : "template-project";
+  }
+
   public static String version() {
     String v = Cli.class.getPackage().getImplementationVersion();
     // Package.getImplementationVersion() only resolves when running from a jar with a manifest (e.g. the
@@ -30,13 +37,17 @@ public final class Cli
     return (v != null) ? v : "0.0.0+unknown";
   }
 
+  public static String versionLine() {
+    return name() + " " + version() + " - Copyright Giovanni Pellicciotta";
+  }
+
   public static int run(String[] args, PrintStream out, PrintStream err) {
     if ((args.length == 0) || "help".equals(args[0]) || "--help".equals(args[0])) {
       out.print(USAGE);
       return 0;
     }
     if ("version".equals(args[0]) || "--version".equals(args[0])) {
-      out.println(version());
+      out.println(versionLine());
       return 0;
     }
     if ("greet".equals(args[0])) {

@@ -3,7 +3,7 @@ plugins {
 }
 
 group   = 'com.hinolugi'
-version = '0.1.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
+version = '0.2.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
 
 repositories {
   mavenCentral()
