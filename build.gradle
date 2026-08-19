@@ -2,8 +2,9 @@ plugins {
   id 'application'
 }
 
-group   = 'com.hinolugi'
-version = '0.2.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
+group      = 'com.hinolugi'
+version    = '0.3.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
+ext.vendor = 'Giovanni Pellicciotta' // Single source of truth for the copyright name - see Cli.java
 
 repositories {
   mavenCentral()
@@ -33,17 +34,19 @@ test {
   useJUnitPlatform()
 }
 
-// Stamps the resolved project version into the jar manifest so Cli.java can read it back at runtime via
-// Package.getImplementationVersion() - this is the single source of truth, there is no second hardcoded
-// version string to keep in sync (mirrors the Python template's importlib.metadata.version() approach).
-// Main-Class makes the plain jar directly runnable via `java -jar` (the 'application' plugin's own mainClass
-// setting only wires up the 'run' task and the generated start scripts, not the jar's own manifest).
+// Stamps the resolved project version (and vendor/copyright name) into the jar manifest so Cli.java can read
+// them back at runtime via Package.getImplementationVersion()/getImplementationVendor() - this is the single
+// source of truth, there is no second hardcoded version/name string to keep in sync (mirrors the Python
+// template's importlib.metadata.version() approach). Main-Class makes the plain jar directly runnable via
+// `java -jar` (the 'application' plugin's own mainClass setting only wires up the 'run' task and the generated
+// start scripts, not the jar's own manifest).
 jar {
   manifest {
     attributes(
       'Main-Class':              application.mainClass.get(),
       'Implementation-Title':    project.name,
-      'Implementation-Version':  project.version
+      'Implementation-Version':  project.version,
+      'Implementation-Vendor':   project.ext.vendor
     )
   }
 }

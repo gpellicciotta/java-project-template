@@ -37,8 +37,15 @@ public final class Cli
     return (v != null) ? v : "0.0.0+unknown";
   }
 
+  public static String vendor() {
+    String v = Cli.class.getPackage().getImplementationVendor();
+    // Same jar-manifest-only caveat as version()/name(): Implementation-Vendor only resolves when running
+    // from the built jar, not when running compiled classes directly (e.g. `gradlew run` or the test suite).
+    return (v != null) ? v : "Giovanni Pellicciotta";
+  }
+
   public static String versionLine() {
-    return name() + " " + version() + " - Copyright Giovanni Pellicciotta";
+    return name() + " " + version() + " - Copyright " + vendor();
   }
 
   public static int run(String[] args, PrintStream out, PrintStream err) {

@@ -2,6 +2,18 @@
 
 All notes will be in reverse chronological order.
 
+## 2026-08-19 v0.3.0
+- Added `docs/multi-module.md`, documenting the minimal `buildSrc` convention-plugin shape to reach for once a
+  second Gradle module is needed (CLAUDE.md's "Development Guidelines" now links to it), based on a pattern
+  survey of `hinolugi-counters`.
+- Added a `package-info.java` convention: non-obvious package design decisions are documented in the package's
+  `package-info.java` rather than a README fragment. `src/main/java/myproject/package-info.java` is the
+  worked example (documents the `Cli`/`Core`/`Scaffold` split), and CLAUDE.md's Conventions section records
+  the rule, based on a pattern survey of `hinolugi-support.java`.
+- The `version` command's copyright name is no longer hardcoded in `Cli.java`: it's read from the jar
+  manifest's `Implementation-Vendor` (`Cli.java`'s new `vendor()`, mirroring `name()`/`version()`), stamped
+  from a new single-source-of-truth `ext.vendor` in `build.gradle`.
+
 ## 2026-08-19 v0.2.0
 - `version` command now prints `{project name} {version} - Copyright Giovanni Pellicciotta` instead of just
   the bare version number. The project name is read from the jar manifest's `Implementation-Title`

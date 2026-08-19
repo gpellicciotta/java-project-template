@@ -39,7 +39,8 @@ These apply to every project scaffolded from this template, not just this one:
 - Favour simplicity over ingenuity. Keep things as simple as possible for what's actually needed today — don't
   design for hypothetical future requirements. Stay a single Gradle project as long as that's true; only split
   into a multi-project build (with a `buildSrc` convention plugin sharing the toolchain/test setup across
-  subprojects) once there's a real second module.
+  subprojects) once there's a real second module — see `docs/multi-module.md` for the minimal shape to reach
+  for at that point.
 - Minimize third-party dependencies. The JDK and JUnit are enough to start; add a dependency only when it
   earns its ongoing maintenance cost.
 - Make it easy to get started: a clone + `. .\setup.ps1` (or `gradlew build`) should be enough to get a
@@ -60,6 +61,9 @@ These apply to every project scaffolded from this template, not just this one:
   (design notes, detailed plans, investigation write-ups) belongs under `docs/` instead.
 - Keep `README.md`'s setup/usage/layout sections in sync with the code as it evolves — treat drift there as a
   bug, not a documentation nice-to-have.
+- Non-obvious package design decisions (why it's split this way, what a package deliberately does or doesn't
+  own) belong in that package's `package-info.java`, not a README fragment — see
+  `src/main/java/myproject/package-info.java` for the pattern.
 - Style guide: 2-space indentation (never tabs), UTF-8, LF line endings everywhere. Enforced by `.editorconfig`;
   don't let it drift from these numbers.
 - The version is stamped into the jar manifest (`build.gradle`'s `jar { manifest { ... } }`) and read back at
