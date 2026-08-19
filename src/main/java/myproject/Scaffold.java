@@ -1,0 +1,227 @@
+package myproject;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+/** Creates a new project as a renamed copy of this template project. */
+public final class Scaffold
+{
+  private Scaffold() { }
+
+  public static final class ScaffoldException extends Exception
+  {
+    public ScaffoldException(String message) { super(message); }
+  }
+
+  static final String PACKAGE_NAME = "myproject";
+  static final String PROJECT_SLUG = "template-project";
+  static final String REPO_SLUG = "java-template-project";
+  static final String TITLE_PLACEHOLDER = "Java Template Project";
+
+  private static final List<String> MARKER_FILES = List.of("build.gradle", "TODO.md", "RELEASES.md");
+  private static final Set<String> EXCLUDED_NAMES = Set.of(
+      ".git", ".gradle", "build", "out", ".idea", ".vscode"
+  );
+
+  /**
+   * Walk up from where this class was loaded from (e.g. {@code build/classes/java/main} when run via
+   * {@code gradlew run}) to find this template project's root directory - the Java equivalent of
+   * the Python template's {@code Path(__file__).resolve()}-based search, since there is no installed
+   * package metadata to introspect the way Python's editable install provides.
+   */
+  static Path findTemplateRoot() throws ScaffoldException {
+    Path start;
+    try {
+      start = Paths.get(Cli.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+    } catch (URISyntaxException | NullPointerException | SecurityException e) {
+      start = Paths.get(System.getProperty("user.dir"));
+    }
+    for (Path candidate = start; candidate != null; candidate = candidate.getParent()) {
+      Path candidateDir = candidate;
+      boolean hasMarkers = MARKER_FILES.stream().allMatch(name -> Files.isRegularFile(candidateDir.resolve(name)));
+      if (hasMarkers && Files.isDirectory(candidateDir.resolve("src/main/java/" + PACKAGE_NAME))) {
+        return candidateDir;
+      }
+    }
+    throw new ScaffoldException(
+        "Could not locate the template project root (expected build.gradle, TODO.md, RELEASES.md and "
+        + "src/main/java/" + PACKAGE_NAME + "/ in a parent directory). 'create' must be run from within a "
+        + "checkout of " + REPO_SLUG + " (e.g. via 'gradlew run --args=\"create ...\"')."
+    );
+  }
+
+  private static String toPackageName(String projectName) throws ScaffoldException {
+    String packageName = projectName.replaceAll("[^0-9a-zA-Z]+", "_")
+                                     .replaceAll("^_+|_+$", "")
+                                     .toLowerCase();
+    if (!Pattern.matches("^[a-z_][a-z0-9_]*$", packageName)) {
+      throw new ScaffoldException("Cannot derive a valid Java package name from '" + projectName + "'.");
+    }
+    return packageName;
+  }
+
+  private static String toTitle(String projectName) {
+    String[] words = projectName.replace('-', ' ').replace('_', ' ').split(" +");
+    StringBuilder title = new StringBuilder();
+    for (String word : words) {
+      if (word.isEmpty()) {
+        continue;
+      }
+      if (title.length() > 0) {
+        title.append(' ');
+      }
+      title.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase());
+    }
+    return title.toString();
+  }
+
+  private static void copyTree(Path source, Path destination) throws ScaffoldException {
+    try (Stream<Path> walk = Files.walk(source)) {
+      walk.forEach(path -> {
+        Path relative = source.relativize(path);
+        for (Path part : relative) {
+          if (EXCLUDED_NAMES.contains(part.toString()) || part.toString().endsWith(".egg-info")) {
+            return; // Skip anything under an excluded directory.
+          }
+        }
+        Path target = destination.resolve(relative);
+        try {
+          if (Files.isDirectory(path)) {
+            Files.createDirectories(target);
+          } else {
+            Files.createDirectories(target.getParent());
+            Files.copy(path, target, StandardCopyOption.COPY_ATTRIBUTES);
+          }
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+    } catch (IOException | UncheckedIOException e) {
+      throw new ScaffoldException("Failed to copy template tree: " + e.getMessage());
+    }
+  }
+
+  private static void renamePackageDir(Path destination, String sourceSet, String packageName) throws ScaffoldException {
+    Path oldDir = destination.resolve("src").resolve(sourceSet).resolve("java").resolve(PACKAGE_NAME);
+    if (!packageName.equals(PACKAGE_NAME) && Files.isDirectory(oldDir)) {
+      Path newDir = oldDir.resolveSibling(packageName);
+      try {
+        Files.move(oldDir, newDir);
+      } catch (IOException e) {
+        throw new ScaffoldException("Failed to rename " + oldDir + ": " + e.getMessage());
+      }
+    }
+  }
+
+  /** old -> new replacements, applied in order; order matters since {@link #REPO_SLUG} contains {@link #PROJECT_SLUG}. */
+  private static void rewriteTextFiles(Path root, List<String[]> replacements) throws ScaffoldException {
+    try (Stream<Path> walk = Files.walk(root)) {
+      for (Path path : (Iterable<Path>) walk.filter(Files::isRegularFile)::iterator) {
+        // Never touch the binary Gradle wrapper jar - a text rewrite would corrupt it.
+        if (path.toString().endsWith(".jar") || path.toString().endsWith(".class")) {
+          continue;
+        }
+        String text;
+        try {
+          text = Files.readString(path, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+          continue; // Not valid UTF-8 text (e.g. a binary file) - leave it untouched.
+        }
+        String newText = text;
+        for (String[] replacement : replacements) {
+          newText = newText.replace(replacement[0], replacement[1]);
+        }
+        if (!newText.equals(text)) {
+          Files.writeString(path, newText, StandardCharsets.UTF_8);
+        }
+      }
+    } catch (IOException e) {
+      throw new ScaffoldException("Failed to rewrite template placeholders: " + e.getMessage());
+    }
+  }
+
+  private static void writeFreshReleasesMd(Path destination, String title) throws ScaffoldException {
+    String content = "# Release Notes\n\n"
+        + "All notes will be in reverse chronological order.\n\n"
+        + "## [Unreleased] v0.1.0\n"
+        + "- Initial release of the " + title + " project.\n";
+    try {
+      Files.writeString(destination.resolve("RELEASES.md"), content, StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new ScaffoldException("Failed to write RELEASES.md: " + e.getMessage());
+    }
+  }
+
+  private static void writeFreshTodoMd(Path destination) throws ScaffoldException {
+    try {
+      Files.writeString(destination.resolve("TODO.md"), "# TODO\n\nOrdered by priority.\n", StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new ScaffoldException("Failed to write TODO.md: " + e.getMessage());
+    }
+  }
+
+  private static void resetBuildGradleVersion(Path destination) throws ScaffoldException {
+    Path buildGradle = destination.resolve("build.gradle");
+    try {
+      String text = Files.readString(buildGradle, StandardCharsets.UTF_8);
+      String newText = text.replaceFirst("(?m)^version\\s*=\\s*'[^']*'", "version = '0.0.1'");
+      Files.writeString(buildGradle, newText, StandardCharsets.UTF_8);
+    } catch (IOException e) {
+      throw new ScaffoldException("Failed to reset build.gradle's version: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Creates a new project at {@code outputDir/projectName}, as a renamed copy of this template.
+   *
+   * <p>Automates the manual steps documented in this template's README under "Starting a new project from
+   * this template": copy the tree, rename the {@code myproject} package (in both {@code src/main} and
+   * {@code src/test}), replace the {@code template-project} / {@code java-template-project} name placeholders
+   * throughout, and reset {@code RELEASES.md}, {@code TODO.md}, and {@code build.gradle}'s {@code version} -
+   * the new project starts its own history rather than inheriting the template's.
+   */
+  public static Path createProject(String projectName, String outputDir) throws ScaffoldException {
+    Path templateRoot = findTemplateRoot();
+
+    Path destination = Paths.get(outputDir).toAbsolutePath().normalize().resolve(projectName);
+    if (Files.exists(destination)) {
+      throw new ScaffoldException("Destination " + destination + " already exists.");
+    }
+
+    String packageName = toPackageName(projectName);
+    String title = toTitle(projectName);
+
+    try {
+      Files.createDirectories(destination.getParent());
+    } catch (IOException e) {
+      throw new ScaffoldException("Failed to create " + destination.getParent() + ": " + e.getMessage());
+    }
+    copyTree(templateRoot, destination);
+
+    renamePackageDir(destination, "main", packageName);
+    renamePackageDir(destination, "test", packageName);
+
+    rewriteTextFiles(destination, List.of(
+        new String[]{REPO_SLUG, projectName},
+        new String[]{PROJECT_SLUG, projectName},
+        new String[]{TITLE_PLACEHOLDER, title},
+        new String[]{PACKAGE_NAME, packageName}
+    ));
+
+    writeFreshReleasesMd(destination, title);
+    writeFreshTodoMd(destination);
+    resetBuildGradleVersion(destination);
+
+    return destination;
+  }
+}
