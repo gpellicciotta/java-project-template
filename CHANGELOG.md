@@ -13,7 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.0 [2026-08-24]
-- Aligned template structure, documentation, and tooling with [cross-project development guidelines](https://github.com/gpellicciotta/dev-guidelines):
+- Aligned template structure, documentation, and tooling with cross-project development guidelines:
   - Renamed `LICENSE` to `LICENSE.md` and `RELEASES.md` to `CHANGELOG.md` with version status tags.
   - Formatted `TODO.md` to follow milestone-based task tracking (`## Next Milestone`, `### Backlog`) per coordinating work guidelines.
   - Added `work/` to `.gitignore` to support parallel task worktrees.

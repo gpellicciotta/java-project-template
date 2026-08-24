@@ -31,7 +31,7 @@ stay pure/dependency-free so it's testable without live credentials").
 
 These apply to every project scaffolded from this template, not just this one:
 
-- Follow the [cross-project development guidelines](https://github.com/gpellicciotta/dev-guidelines) (and local agent rules).
+- Follow the cross-project development guidelines in `dev-guidelines` (and `GEMINI.md` / `CLAUDE.md`).
 - Use semver (`MAJOR.MINOR.PATCH`). Projects scaffolded from this template start pre-1.0 (`0.x.y` — see
   `Scaffold.java`'s version reset), so breaking changes are still expected early on but must be called out
   explicitly in `CHANGELOG.md` rather than reading as routine. Once a project reaches `1.0.0`, a breaking

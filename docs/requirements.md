@@ -7,7 +7,7 @@ Functional and technical requirements for the `java-project-template` project.
 ## 1. High-Level Goals
 
 - Provide a standardized, minimal, and fully configured starter project template for Java development using Gradle.
-- Enable developers and AI assistants to bootstrap clean, production-ready Java projects adhering to [cross-project development guidelines](https://github.com/gpellicciotta/dev-guidelines).
+- Enable developers and AI assistants to bootstrap clean, production-ready Java projects adhering to cross-project development guidelines.
 - Provide out-of-the-box support for unit testing with JUnit 5, JDK toolchain pinning, manifest-based versioning, and GitHub Actions CI.
 - Supply an automated scaffolding tool (`create` subcommand) that clones and renames the template cleanly into new project repositories.
 

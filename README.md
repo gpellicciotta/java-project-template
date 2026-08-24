@@ -2,7 +2,7 @@
 
 A minimal starter project to get Java and Gradle development started quickly using the standard `src/main/java` + `src/test/java` layout.
 
-Includes JUnit 5 Jupiter for testing, the Gradle wrapper (pinned Gradle + JDK toolchain versions), a GitHub Actions CI workflow, and full adherence to [cross-project development guidelines](https://github.com/gpellicciotta/dev-guidelines) (`CHANGELOG.md`, `TODO.md`, `LICENSE.md`, and `docs/`).
+Includes JUnit 5 Jupiter for testing, the Gradle wrapper (pinned Gradle + JDK toolchain versions), a GitHub Actions CI workflow, and full adherence to cross-project development guidelines (`CHANGELOG.md`, `TODO.md`, `LICENSE.md`, and `docs/`).
 
 ## Directory Layout
 
