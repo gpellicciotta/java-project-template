@@ -17,8 +17,7 @@ installed) — there is no separate environment bootstrap step to run first, unl
 
 - One-shot bootstrap: `. .\setup.ps1` (git init if needed, then `gradlew build`)
 - Build + test + jar: `gradlew build`
-- Run the CLI: `gradlew run --args="<command> [args]"` — or `java -jar build/libs/<name>-<version>.jar <command>
-  [args]` after `gradlew build`
+- Run the CLI: `gradlew run --args="<command> [args]"` — or `java -jar build/libs/<name>-<version>.jar <command> [args]` after `gradlew build`
 - Run the test suite only: `gradlew test`
 - **[TODO]** Add any other project-specific commands here.
 
@@ -32,9 +31,10 @@ stay pure/dependency-free so it's testable without live credentials").
 
 These apply to every project scaffolded from this template, not just this one:
 
+- Follow the cross-project development guidelines in `dev-guidelines` (and `GEMINI.md` / `CLAUDE.md`).
 - Use semver (`MAJOR.MINOR.PATCH`). Projects scaffolded from this template start pre-1.0 (`0.x.y` — see
   `Scaffold.java`'s version reset), so breaking changes are still expected early on but must be called out
-  explicitly in `RELEASES.md` rather than reading as routine. Once a project reaches `1.0.0`, a breaking
+  explicitly in `CHANGELOG.md` rather than reading as routine. Once a project reaches `1.0.0`, a breaking
   change requires a major version bump instead.
 - Favour simplicity over ingenuity. Keep things as simple as possible for what's actually needed today — don't
   design for hypothetical future requirements. Stay a single Gradle project as long as that's true; only split
@@ -51,14 +51,12 @@ These apply to every project scaffolded from this template, not just this one:
 
 ## Conventions
 
-- `RELEASES.md` (top-level) tracks version history: bump `build.gradle`'s `version` for every user-facing
-  change and add a matching dated entry to `RELEASES.md` with the same version number. Pre-1.0 (`0.x.y`)
-  projects should call out breaking changes explicitly in the entry rather than letting them read as a routine
-  addition; at `1.0.0`+, a breaking change requires a major version bump instead.
-- `TODO.md` (top-level) is the prioritized backlog. When a TODO item is implemented, remove it and add the
-  corresponding `RELEASES.md` entry instead of leaving both.
-- `RELEASES.md` and `TODO.md` live at the repo root, not under `docs/`, for visibility. Other documentation
-  (design notes, detailed plans, investigation write-ups) belongs under `docs/` instead.
+- `CHANGELOG.md` (top-level) tracks version history: bump `build.gradle`'s `version` for every user-facing
+  change and add a matching dated entry to `CHANGELOG.md` with the same version number.
+- `TODO.md` (top-level) is the milestone-based task index. Follow the claim and worktree protocol defined in
+  `coordinating-work-guidelines.md`.
+- `CHANGELOG.md`, `TODO.md`, `LICENSE.md`, and `README.md` live at the repo root.
+- Core documentation lives under `docs/` (`docs/index.md`, `docs/requirements.md`, `docs/devops.md`, `docs/multi-module.md`).
 - Keep `README.md`'s setup/usage/layout sections in sync with the code as it evolves — treat drift there as a
   bug, not a documentation nice-to-have.
 - Non-obvious package design decisions (why it's split this way, what a package deliberately does or doesn't
@@ -69,7 +67,6 @@ These apply to every project scaffolded from this template, not just this one:
 - The version is stamped into the jar manifest (`build.gradle`'s `jar { manifest { ... } }`) and read back at
   runtime via `Package.getImplementationVersion()` (`Cli.java`'s `version()`, with a `"0.0.0+unknown"` fallback
   for when running from compiled classes rather than a jar, e.g. `gradlew run` or the test suite) rather than
-  hardcoded, so `build.gradle`'s `version` stays the single source of truth — mirrors
-  a second hand-maintained constant, which is exactly the kind of thing that drifts.
+  hardcoded, so `build.gradle`'s `version` stays the single source of truth.
 - **[TODO]** Add project-specific invariants/conventions here as they emerge — things a future change must not
   casually break.

@@ -3,7 +3,7 @@ plugins {
 }
 
 group      = 'com.hinolugi'
-version    = '0.3.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
+version    = '1.0.0' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
 ext.vendor = 'Giovanni Pellicciotta' // Single source of truth for the copyright name - see Cli.java
 
 repositories {

@@ -10,17 +10,6 @@ public final class Cli
 {
   private Cli() { }
 
-  private static final String USAGE = String.join("\n",
-      "usage: template-project <command> [args]",
-      "",
-      "commands:",
-      "  help                              Show this usage info",
-      "  version                           Show the current version",
-      "  greet [name]                      Print a greeting (sample business logic; default name: wereld)",
-      "  create <project-name> [-o <dir>]  Create a new project as a renamed copy of this template",
-      ""
-  );
-
   public static String name() {
     String n = Cli.class.getPackage().getImplementationTitle();
     // Same jar-manifest-only caveat as version() below: Implementation-Title only resolves when running from
@@ -32,8 +21,7 @@ public final class Cli
     String v = Cli.class.getPackage().getImplementationVersion();
     // Package.getImplementationVersion() only resolves when running from a jar with a manifest (e.g. the
     // installed distribution) - it's null when running compiled classes directly (e.g. `gradlew run`,
-    // an IDE run configuration, or the test suite). Mirrors the Python template's
-    // `except PackageNotFoundError: __version__ = "0.0.0+unknown"` fallback.
+    // an IDE run configuration, or the test suite).
     return (v != null) ? v : "0.0.0+unknown";
   }
 
@@ -45,24 +33,66 @@ public final class Cli
   }
 
   public static String versionLine() {
-    return name() + " " + version() + " - Copyright " + vendor();
+    return name() + " v" + version() + " - Copyright " + vendor();
+  }
+
+  public static String helpMessage(boolean verbose) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(versionLine()).append("\n\n");
+    sb.append("A minimal starter project and scaffolding CLI for Java and Gradle development.\n\n");
+    sb.append("usage: ").append(name()).append(" <command> [options]\n\n");
+    sb.append("commands:\n");
+    sb.append("  help                              Show this usage info\n");
+    sb.append("  version                           Show the current version\n");
+    sb.append("  greet [name]                      Print a greeting (sample business logic; default: wereld)\n");
+    sb.append("  create <project-name> [-o <dir>]  Create a new project as a renamed copy of this template\n\n");
+    sb.append("options:\n");
+    sb.append("  -h, --help                        Show this usage info\n");
+    sb.append("  --version                         Show the current version\n");
+    sb.append("  --verbose                         Show extended usage guidelines\n\n");
+    if (verbose) {
+      sb.append("details:\n");
+      sb.append("  create:\n");
+      sb.append("    Copies this template tree to <dir>/<project-name>, updates package declarations,\n");
+      sb.append("    resets CHANGELOG.md and TODO.md, and initializes a fresh build.gradle version.\n\n");
+    }
+    sb.append("exit codes:\n");
+    sb.append("  0  Success (including help and version display)\n");
+    sb.append("  1  Error (invalid arguments or execution failure)\n");
+    return sb.toString();
   }
 
   public static int run(String[] args, PrintStream out, PrintStream err) {
-    if ((args.length == 0) || "help".equals(args[0]) || "--help".equals(args[0])) {
-      out.print(USAGE);
+    if (args.length == 0) {
+      out.print(helpMessage(false));
       return 0;
     }
-    if ("version".equals(args[0]) || "--version".equals(args[0])) {
+
+    String firstArg = args[0];
+    if ("help".equals(firstArg) || "--help".equals(firstArg) || "-h".equals(firstArg)) {
+      boolean verbose = false;
+      for (int i = 1; i < args.length; i++) {
+        if ("--verbose".equals(args[i])) {
+          verbose = true;
+          break;
+        }
+      }
+      out.print(helpMessage(verbose));
+      return 0;
+    }
+
+    if ("version".equals(firstArg) || "--version".equals(firstArg)) {
       out.println(versionLine());
       return 0;
     }
-    if ("greet".equals(args[0])) {
+
+    if ("greet".equals(firstArg)) {
       String name = (args.length > 1) ? args[1] : "wereld";
       out.println(Core.greet(name));
       return 0;
     }
-    if ("create".equals(args[0])) {
+
+    if ("create".equals(firstArg)) {
       if (args.length < 2) {
         err.println("error: 'create' requires a project-name argument");
         return 1;
@@ -83,7 +113,9 @@ public final class Cli
         return 1;
       }
     }
-    out.print(USAGE);
+
+    err.println("error: unknown command '" + firstArg + "'");
+    out.print(helpMessage(false));
     return 1;
   }
 

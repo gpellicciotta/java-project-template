@@ -28,9 +28,9 @@ public final class Scaffold
   static final String REPO_SLUG = "java-template-project";
   static final String TITLE_PLACEHOLDER = "Java Template Project";
 
-  private static final List<String> MARKER_FILES = List.of("build.gradle", "TODO.md", "RELEASES.md");
+  private static final List<String> MARKER_FILES = List.of("build.gradle", "TODO.md", "CHANGELOG.md");
   private static final Set<String> EXCLUDED_NAMES = Set.of(
-      ".git", ".gradle", "build", "out", ".idea", ".vscode"
+      ".git", ".gradle", "build", "out", ".idea", ".vscode", "work"
   );
 
   /**
@@ -54,7 +54,7 @@ public final class Scaffold
       }
     }
     throw new ScaffoldException(
-        "Could not locate the template project root (expected build.gradle, TODO.md, RELEASES.md and "
+        "Could not locate the template project root (expected build.gradle, TODO.md, CHANGELOG.md and "
         + "src/main/java/" + PACKAGE_NAME + "/ in a parent directory). 'create' must be run from within a "
         + "checkout of " + REPO_SLUG + " (e.g. via 'gradlew run --args=\"create ...\"')."
     );
@@ -150,21 +150,43 @@ public final class Scaffold
     }
   }
 
-  private static void writeFreshReleasesMd(Path destination, String title) throws ScaffoldException {
-    String content = "# Release Notes\n\n"
-        + "All notes will be in reverse chronological order.\n\n"
-        + "## [Unreleased] v0.1.0\n"
+  private static void writeFreshChangelogMd(Path destination, String title) throws ScaffoldException {
+    String content = "# Versioned Changes\n\n"
+        + "A summarized overview of all changes, per version of this project.\n\n"
+        + "> Entries will be added in reverse chronological order, so with the most recent at the top.\n"
+        + ">\n"
+        + "> Status codes used are:\n"
+        + "> - `[in development]` - actively being developed\n"
+        + "> - `[{{date}}]` - frozen/finalized on {{date}}\n"
+        + "> - `[released: {{date}}]` - released to package manager or production on {{date}}\n"
+        + "> - `[broken]` - considered broken and not be used\n\n"
+        + "---\n\n"
+        + "## v0.1.0 [in development]\n"
         + "- Initial release of the " + title + " project.\n";
     try {
-      Files.writeString(destination.resolve("RELEASES.md"), content, StandardCharsets.UTF_8);
+      Files.writeString(destination.resolve("CHANGELOG.md"), content, StandardCharsets.UTF_8);
     } catch (IOException e) {
-      throw new ScaffoldException("Failed to write RELEASES.md: " + e.getMessage());
+      throw new ScaffoldException("Failed to write CHANGELOG.md: " + e.getMessage());
     }
   }
 
   private static void writeFreshTodoMd(Path destination) throws ScaffoldException {
+    String content = "# TODO\n\n"
+        + "An overview of all tasks and their planning.\n\n"
+        + "> Tasks are listed by milestone.\n"
+        + "> See [coordinating work guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md) for the full coordination protocol.\n"
+        + ">\n"
+        + "> Status: `[ ]` available · `[~]` active · `[!]` blocked · `[?]` needs-review\n"
+        + "> Owner: `@name` shown only when active/blocked/needs-review.\n"
+        + "> Dependencies: `(needs Tnnnn)` shown only when unresolved.\n\n"
+        + "---\n\n"
+        + "## Next Milestone\n\n"
+        + "*(no active tasks)*\n\n"
+        + "---\n\n"
+        + "### Backlog\n\n"
+        + "*(no backlog items yet)*\n";
     try {
-      Files.writeString(destination.resolve("TODO.md"), "# TODO\n\nOrdered by priority.\n", StandardCharsets.UTF_8);
+      Files.writeString(destination.resolve("TODO.md"), content, StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new ScaffoldException("Failed to write TODO.md: " + e.getMessage());
     }
@@ -187,7 +209,7 @@ public final class Scaffold
    * <p>Automates the manual steps documented in this template's README under "Starting a new project from
    * this template": copy the tree, rename the {@code myproject} package (in both {@code src/main} and
    * {@code src/test}), replace the {@code template-project} / {@code java-template-project} name placeholders
-   * throughout, and reset {@code RELEASES.md}, {@code TODO.md}, and {@code build.gradle}'s {@code version} -
+   * throughout, and reset {@code CHANGELOG.md}, {@code TODO.md}, and {@code build.gradle}'s {@code version} -
    * the new project starts its own history rather than inheriting the template's.
    */
   public static Path createProject(String projectName, String outputDir) throws ScaffoldException {
@@ -218,7 +240,7 @@ public final class Scaffold
         new String[]{PACKAGE_NAME, packageName}
     ));
 
-    writeFreshReleasesMd(destination, title);
+    writeFreshChangelogMd(destination, title);
     writeFreshTodoMd(destination);
     resetBuildGradleVersion(destination);
 

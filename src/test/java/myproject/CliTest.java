@@ -25,24 +25,79 @@ class CliTest
     return outBuf.toString(StandardCharsets.UTF_8);
   }
 
+  private static int runAndGetExitCode(ByteArrayOutputStream outBuf, ByteArrayOutputStream errBuf, String... args) throws Exception {
+    return Cli.run(args, new PrintStream(outBuf, true, "UTF-8"), new PrintStream(errBuf, true, "UTF-8"));
+  }
+
   @Test
   void helpExitsZero() throws Exception {
-    assertTrue(runAndCaptureOut("help").contains("usage:"));
+    String out = runAndCaptureOut("help");
+    assertTrue(out.contains("usage:"));
+    assertTrue(out.contains("exit codes:"));
+    assertTrue(out.contains("commands:"));
+    assertTrue(out.contains("options:"));
+  }
+
+  @Test
+  void helpShortOptionExitsZero() throws Exception {
+    String out = runAndCaptureOut("-h");
+    assertTrue(out.contains("usage:"));
+    assertTrue(out.contains("exit codes:"));
+  }
+
+  @Test
+  void helpLongOptionExitsZero() throws Exception {
+    String out = runAndCaptureOut("--help");
+    assertTrue(out.contains("usage:"));
+    assertTrue(out.contains("exit codes:"));
+  }
+
+  @Test
+  void helpVerboseOptionIncludesDetails() throws Exception {
+    String out = runAndCaptureOut("help", "--verbose");
+    assertTrue(out.contains("details:"));
+    assertTrue(out.contains("create:"));
   }
 
   @Test
   void noArgsShowsHelp() throws Exception {
-    assertTrue(runAndCaptureOut().contains("usage:"));
+    String out = runAndCaptureOut();
+    assertTrue(out.contains("usage:"));
+    assertTrue(out.contains("exit codes:"));
   }
 
   @Test
-  void version() throws Exception {
-    assertFalse(runAndCaptureOut("version").isBlank());
+  void versionCommand() throws Exception {
+    String out = runAndCaptureOut("version").strip();
+    assertTrue(out.startsWith("template-project v"));
+    assertTrue(out.contains("Copyright Giovanni Pellicciotta"));
+  }
+
+  @Test
+  void versionOption() throws Exception {
+    String out = runAndCaptureOut("--version").strip();
+    assertTrue(out.startsWith("template-project v"));
+    assertTrue(out.contains("Copyright Giovanni Pellicciotta"));
   }
 
   @Test
   void greet() throws Exception {
     assertEquals("Hello, Gio", runAndCaptureOut("greet", "Gio").strip());
+  }
+
+  @Test
+  void greetDefaultName() throws Exception {
+    assertEquals("Hello, wereld", runAndCaptureOut("greet").strip());
+  }
+
+  @Test
+  void unknownCommandReturnsOne() throws Exception {
+    ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+    ByteArrayOutputStream errBuf = new ByteArrayOutputStream();
+    int exitCode = runAndGetExitCode(outBuf, errBuf, "unknown-cmd");
+    assertEquals(1, exitCode);
+    assertTrue(errBuf.toString(StandardCharsets.UTF_8).contains("error: unknown command 'unknown-cmd'"));
+    assertTrue(outBuf.toString(StandardCharsets.UTF_8).contains("usage:"));
   }
 
   @Test
@@ -53,12 +108,7 @@ class CliTest
     Path destination = tmpDir.resolve(projectName);
     assertTrue(Files.isDirectory(destination));
     assertTrue(Files.isRegularFile(destination.resolve("src/main/java/sample_app/Cli.java")));
-    // Deliberately not a literal "myproject" absence-check: this test file is itself copied (and rewritten) by
-    // `create`, so a hardcoded reference to *this* template's own current package name would get swept up in
-    // that same rewrite when a project scaffolded from this template later runs its own inherited copy of this
-    // test - silently turning the check into an always-true no-op, or (as first written) into a check that
-    // wrongly asserts the just-created package is *absent*. Assert the structural invariant instead: exactly
-    // one package directory under src/main/java, regardless of what it's named.
+
     try (Stream<Path> children = Files.list(destination.resolve("src/main/java"))) {
       List<Path> packageDirs = children.filter(Files::isDirectory).toList();
       assertEquals(1, packageDirs.size(), "expected exactly one package directory, found: " + packageDirs);
@@ -71,11 +121,18 @@ class CliTest
     String readme = Files.readString(destination.resolve("README.md"), StandardCharsets.UTF_8);
     assertTrue(readme.contains("Sample App"));
 
-    String releases = Files.readString(destination.resolve("RELEASES.md"), StandardCharsets.UTF_8);
-    assertTrue(releases.contains("Initial release of the Sample App project."));
+    assertTrue(Files.isRegularFile(destination.resolve("LICENSE.md")));
+
+    String changelog = Files.readString(destination.resolve("CHANGELOG.md"), StandardCharsets.UTF_8);
+    assertTrue(changelog.contains("Initial release of the Sample App project."));
 
     String todo = Files.readString(destination.resolve("TODO.md"), StandardCharsets.UTF_8);
-    assertFalse(todo.contains("github.com/gpellicciotta"));
+    assertTrue(todo.contains("## Next Milestone"));
+    assertTrue(todo.contains("### Backlog"));
+
+    assertTrue(Files.isRegularFile(destination.resolve("docs/index.md")));
+    assertTrue(Files.isRegularFile(destination.resolve("docs/requirements.md")));
+    assertTrue(Files.isRegularFile(destination.resolve("docs/devops.md")));
   }
 
   @Test

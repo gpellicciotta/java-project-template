@@ -10,3 +10,6 @@ out/
 .idea/
 .vscode/
 *.iml
+
+# Task worktrees (git worktree add ./work/Tnnnn-slug)
+work/
