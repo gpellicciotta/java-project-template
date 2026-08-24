@@ -14,3 +14,9 @@ Overview of all documentation and specifications for this project.
 ## Architecture & Design Notes
 
 - [Multi-Module Gradle Projects](multi-module.md): Guidance and minimal convention plugin pattern for splitting into a multi-project Gradle build.
+
+---
+
+## Guidelines
+
+- [Cross-Project Development Guidelines](https://github.com/gpellicciotta/dev-guidelines): Universal standards, language guidelines, and task coordination protocols.
