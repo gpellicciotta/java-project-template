@@ -21,6 +21,8 @@ A summarized overview of all changes, per version of this project.
   - Updated CLI (`Cli.java`) to adhere to CLI guidelines: formatted version output as `{name} v{version} - {copyright}`, added structured multi-line help output with exit codes, and supported `-h`, `--help`, `--version`, and `--verbose`.
   - Updated scaffolding engine (`Scaffold.java`) to emit `CHANGELOG.md`, `LICENSE.md`, and standard `TODO.md` when creating new projects.
   - Expanded test suite (`CliTest.java`) covering all CLI options, exit codes, and scaffolded project validation.
+- Build: Fix `gradlew` missing its executable bit, which broke `./gradlew build` on Linux CI runners
+- Build: Upgrade `actions/checkout` and `actions/setup-java` in CI to their current major versions
 
 ## v0.3.0 [2026-08-19]
 - Added `docs/multi-module.md`, documenting the minimal `buildSrc` convention-plugin shape to reach for once a second Gradle module is needed.
