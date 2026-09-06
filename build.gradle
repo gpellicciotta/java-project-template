@@ -33,6 +33,7 @@ application {
 
 test {
   useJUnitPlatform()
+  testLogging.showStandardStreams = true
 }
 
 // Formatting: normalizes whitespace only (trailing whitespace, final newline, tabs-to-spaces), deliberately

@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Stream test output to console during `gradlew test`/`build` via `testLogging.showStandardStreams`.
 - Build: Add a Spotless formatting gate so `check` now enforces whitespace and indentation rules by default.
 - Build: Fix `gradlew` missing its executable bit, which broke `./gradlew build` on Linux CI runners.
 - Build: Upgrade `actions/checkout` and `actions/setup-java` in CI to their current major versions.
