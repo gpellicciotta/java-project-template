@@ -36,6 +36,8 @@ class CliTest
     assertTrue(out.contains("exit codes:"));
     assertTrue(out.contains("commands:"));
     assertTrue(out.contains("options:"));
+    assertTrue(out.contains("--debug"));
+    assertTrue(out.contains("--log-file"));
   }
 
   @Test
@@ -82,12 +84,68 @@ class CliTest
 
   @Test
   void greet() throws Exception {
-    assertEquals("Hello, Gio", runAndCaptureOut("greet", "Gio").strip());
+    assertTrue(runAndCaptureOut("greet", "Gio").contains("Hello, Gio"));
   }
 
   @Test
   void greetDefaultName() throws Exception {
-    assertEquals("Hello, wereld", runAndCaptureOut("greet").strip());
+    assertTrue(runAndCaptureOut("greet").contains("Hello, wereld"));
+  }
+
+  @Test
+  void greetLogsStartupAndCompletionByDefault() throws Exception {
+    String out = runAndCaptureOut("greet", "Gio");
+    assertTrue(out.contains("Starting template-project"));
+    assertTrue(out.contains("Completed in"));
+  }
+
+  @Test
+  void debugOptionEnablesDebugLevelLogging(@TempDir Path tmpDir) throws Exception {
+    Path logFile = tmpDir.resolve("app.log");
+    ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+    ByteArrayOutputStream errBuf = new ByteArrayOutputStream();
+    runAndGetExitCode(outBuf, errBuf, "--debug", "--log-file", logFile.toString(), "greet", "Gio");
+
+    String logged = Files.readString(logFile, StandardCharsets.UTF_8);
+    assertTrue(logged.contains("**[INFO]**"));
+    assertTrue(logged.contains("config: debug=true"));
+  }
+
+  @Test
+  void logFileOptionAppendsOperationalLogs(@TempDir Path tmpDir) throws Exception {
+    Path logFile = tmpDir.resolve("app.log");
+    ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+    ByteArrayOutputStream errBuf = new ByteArrayOutputStream();
+    runAndGetExitCode(outBuf, errBuf, "--log-file", logFile.toString(), "greet", "Gio");
+
+    assertTrue(Files.isRegularFile(logFile));
+    String logged = Files.readString(logFile, StandardCharsets.UTF_8);
+    assertTrue(logged.contains("Starting template-project"));
+    assertTrue(logged.contains("Completed in"));
+  }
+
+  @Test
+  void errorMessagesAreCapturedInLogFile(@TempDir Path tmpDir) throws Exception {
+    Path logFile = tmpDir.resolve("app.log");
+    ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+    ByteArrayOutputStream errBuf = new ByteArrayOutputStream();
+    int exitCode = runAndGetExitCode(outBuf, errBuf, "--log-file", logFile.toString(), "create");
+
+    assertEquals(1, exitCode);
+    String logged = Files.readString(logFile, StandardCharsets.UTF_8);
+    assertTrue(logged.contains("**[ERROR]**"));
+    assertTrue(logged.contains("requires a project-name argument"));
+  }
+
+  @Test
+  void unwritableLogFileProducesCleanErrorInsteadOfCrashing(@TempDir Path tmpDir) throws Exception {
+    Path logFile = tmpDir.resolve("missing-parent-dir").resolve("app.log");
+    ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+    ByteArrayOutputStream errBuf = new ByteArrayOutputStream();
+    int exitCode = runAndGetExitCode(outBuf, errBuf, "--log-file", logFile.toString(), "greet", "Gio");
+
+    assertEquals(1, exitCode);
+    assertTrue(errBuf.toString(StandardCharsets.UTF_8).contains("error: failed to write --log-file"));
   }
 
   @Test

@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- CLI: Add a minimal reference logging implementation (`Log.java`) with `--debug` and `--log-file` options.
 - Build: Append `+<git-commit-hash>` build metadata to the jar's `Implementation-Version` by default.
 - Build: Stream test output to console during `gradlew test`/`build` via `testLogging.showStandardStreams`.
 - Build: Add a Spotless formatting gate so `check` now enforces whitespace and indentation rules by default.

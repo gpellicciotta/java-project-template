@@ -31,6 +31,14 @@ Functional and technical requirements for the `java-project-template` project.
 - Automate repository renaming, directory structure restructuring, package name rewriting, and reset of version history (`CHANGELOG.md`, `TODO.md`, and `build.gradle`'s version).
 - Prevent accidental overwrite when target directories already exist.
 
+### 2.4. Logging
+- Provide a minimal reference logging implementation (`myproject.Log`) satisfying the cross-project logging
+  guideline: formatted, timestamped log lines, level gating, and an optional append-only log file.
+- Support `--debug` (enables `DEBUG`-level messages, discarded by default) and `--log-file <path>` (appends
+  formatted log lines to `<path>` in addition to the console) as global CLI options.
+- Log a multi-line startup message (name, version, command, config) and a completion summary (duration, exit
+  code) around operational commands (`greet`, `create`); `help`/`version` stay single-line and unlogged.
+
 ---
 
 ## 3. Technical Requirements

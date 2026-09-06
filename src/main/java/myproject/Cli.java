@@ -1,6 +1,10 @@
 package myproject;
 
 import java.io.PrintStream;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sample CLI for template-project. {@link #run} is the testable entry point (returns an exit code, never
@@ -49,7 +53,9 @@ public final class Cli
     sb.append("options:\n");
     sb.append("  -h, --help                        Show this usage info\n");
     sb.append("  --version                         Show the current version\n");
-    sb.append("  --verbose                         Show extended usage guidelines\n\n");
+    sb.append("  --verbose                         Show extended usage guidelines\n");
+    sb.append("  --debug                           Enable debug-level logging\n");
+    sb.append("  --log-file <path>                 Append operational logs to <path>\n\n");
     if (verbose) {
       sb.append("details:\n");
       sb.append("  create:\n");
@@ -62,7 +68,32 @@ public final class Cli
     return sb.toString();
   }
 
-  public static int run(String[] args, PrintStream out, PrintStream err) {
+  public static int run(String[] rawArgs, PrintStream out, PrintStream err) {
+    boolean debugEnabled = false;
+    Path logFile = null;
+    List<String> remaining = new ArrayList<>();
+    for (int i = 0; i < rawArgs.length; i++) {
+      String a = rawArgs[i];
+      if ("--debug".equals(a)) {
+        debugEnabled = true;
+      } else if ("--log-file".equals(a) && (i + 1 < rawArgs.length)) {
+        logFile = Path.of(rawArgs[++i]);
+      } else {
+        remaining.add(a);
+      }
+    }
+    Log.configure(debugEnabled, logFile, out, err);
+    String[] args = remaining.toArray(new String[0]);
+
+    try {
+      return dispatch(args, out, err, debugEnabled, logFile);
+    } catch (UncheckedIOException e) {
+      err.println("error: failed to write --log-file '" + logFile + "': " + e.getCause().getMessage());
+      return 1;
+    }
+  }
+
+  private static int dispatch(String[] args, PrintStream out, PrintStream err, boolean debugEnabled, Path logFile) {
     if (args.length == 0) {
       out.print(helpMessage(false));
       return 0;
@@ -87,14 +118,18 @@ public final class Cli
     }
 
     if ("greet".equals(firstArg)) {
+      long startedAt = logStartup(args, debugEnabled, logFile);
       String name = (args.length > 1) ? args[1] : "wereld";
       out.println(Core.greet(name));
+      logCompletion(startedAt, 0);
       return 0;
     }
 
     if ("create".equals(firstArg)) {
+      long startedAt = logStartup(args, debugEnabled, logFile);
       if (args.length < 2) {
-        err.println("error: 'create' requires a project-name argument");
+        Log.error("error: 'create' requires a project-name argument");
+        logCompletion(startedAt, 1);
         return 1;
       }
       String projectName = args[1];
@@ -105,18 +140,33 @@ public final class Cli
         }
       }
       try {
-        java.nio.file.Path destination = Scaffold.createProject(projectName, outputDir);
+        Path destination = Scaffold.createProject(projectName, outputDir);
         out.println("Created new project at " + destination);
+        logCompletion(startedAt, 0);
         return 0;
       } catch (Scaffold.ScaffoldException e) {
-        err.println("error: " + e.getMessage());
+        Log.error("error: " + e.getMessage());
+        logCompletion(startedAt, 1);
         return 1;
       }
     }
 
-    err.println("error: unknown command '" + firstArg + "'");
+    Log.error("error: unknown command '" + firstArg + "'");
     out.print(helpMessage(false));
     return 1;
+  }
+
+  // Startup/completion logging is only wired into the "operational" commands (greet, create): help/version
+  // are meta-commands that must stay single-line and scriptable, so they never emit log lines.
+  private static long logStartup(String[] args, boolean debugEnabled, Path logFile) {
+    Log.info("Starting " + name() + " v" + version() + "\n"
+        + "  command: " + String.join(" ", args) + "\n"
+        + "  config: debug=" + debugEnabled + ", log-file=" + (logFile == null ? "(none)" : logFile));
+    return System.currentTimeMillis();
+  }
+
+  private static void logCompletion(long startedAt, int exitCode) {
+    Log.info("Completed in " + (System.currentTimeMillis() - startedAt) + "ms (exit code " + exitCode + ")");
   }
 
   public static void main(String[] args) {

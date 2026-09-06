@@ -12,10 +12,12 @@ java-template-project/
     main/java/myproject/
       Core.java             # business logic
       Cli.java              # entry point (registered in build.gradle's application {mainClass})
+      Log.java              # minimal reference logging implementation (console + --log-file)
       Scaffold.java         # `create` subcommand: copies + renames this template into a new project
     test/java/myproject/
       CoreTest.java
       CliTest.java
+      LogTest.java
   docs/                     # project documentation
     index.md                # documentation index
     requirements.md         # functional and technical requirements
@@ -80,6 +82,22 @@ java -jar build/libs/template-project-<version>.jar create <project-name> [-o <o
 `create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory if `-o` is omitted), automating the renames described below in **Starting a new project from this template**. Run it from within a checkout of this template (i.e. after `. .\setup.ps1` or `gradlew build` in this repo). `create` locates the template root by walking up from wherever its own compiled class was loaded from.
 
 For a development run without building or naming the jar, use `.\gradlew.bat run --args="<command> [args]"`.
+
+## Logging
+
+`greet` and `create` log a startup message (name, version, command, config) and a completion summary (duration,
+exit code) via `Log.java`, a minimal reference implementation of the cross-project logging guideline:
+
+```powershell
+java -jar build/libs/template-project-<version>.jar --debug --log-file app.log greet Gio
+```
+
+- `--debug` enables `DEBUG`-level messages (discarded by default).
+- `--log-file <path>` appends timestamped, formatted log lines to `<path>` in addition to the console.
+- Console output omits timestamps and the `INFO` severity indicator; `--log-file` entries always carry both.
+
+`help` and `version` stay single-line and scriptable and never emit log lines. Call `Log.error`/`Log.warn`/
+`Log.info`/`Log.debug` directly from your own business logic to log more than the CLI's own start/stop events.
 
 ## Building the Jar
 
