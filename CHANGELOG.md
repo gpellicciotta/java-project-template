@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Append `+<git-commit-hash>` build metadata to the jar's `Implementation-Version` by default.
 - Build: Stream test output to console during `gradlew test`/`build` via `testLogging.showStandardStreams`.
 - Build: Add a Spotless formatting gate so `check` now enforces whitespace and indentation rules by default.
 - Build: Fix `gradlew` missing its executable bit, which broke `./gradlew build` on Linux CI runners.
