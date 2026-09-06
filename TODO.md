@@ -9,13 +9,14 @@ An overview of all tasks and their planning.
 > Owner: `@name` shown only when active/blocked/needs-review.
 > Dependencies: `(needs Tnnnn)` shown only when unresolved.
 
-**Next ID:** 0003
+**Next ID:** 0005
 
 ---
 
 ## Next Milestone
 
-*(no active tasks)*
+- [ ] A0003 Update all task and documentation files to be in line with the latest guidelines
+- [ ] T0004 Review the Java projects hinolugi-support.java and hinolugi-auth and document structural differences from this project: look at it as if these projects should have been started from this project, yet keeping in mind that this is a generic template project: we don't want to include things that are only relevant for 1 particular project. For each major topic, make a separate TODO in the backlog and mark it for review by @gio.
 
 ---
 
