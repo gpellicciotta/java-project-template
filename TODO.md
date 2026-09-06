@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] A0013 Upgrade to using the latest released hinolugi-support.java as we want derived projects also to do that from the beginning
+- [~] A0013 [owner: @claude] Upgrade to using the latest released hinolugi-support.java as we want derived projects also to do that from the beginning
 - [ ] A0005 Add a Spotless formatting/lint gate to build.gradle by default: only hinolugi-support.java wires up 'com.diffplug.spotless' with 'check' depending on 'spotlessCheck'; neither the template nor hinolugi-auth run any formatting or static analysis, despite the guideline requiring it in CI.
 - [ ] A0006 Add 'testLogging.showStandardStreams = true' to the template's default test block: both real projects already set it, matching the Java guideline, while the template's test block only calls 'useJUnitPlatform()'.
 - [ ] T0007 The jar manifest should append a git-commit-hash build-metadata suffix to Implementation-Version by default, as the versioning guideline requires: only hinolugi-support.java currently computes 'git rev-parse --short HEAD' and appends '+<hash>'; neither the template nor hinolugi-auth's manifests do this.
