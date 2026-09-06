@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Ignore `*.log` files and `log/` directories, and switch `.idea/` to a selective ignore pattern.
 - CLI: Add a minimal reference logging implementation (`Log.java`) with `--debug` and `--log-file` options.
 - Build: Append `+<git-commit-hash>` build metadata to the jar's `Implementation-Version` by default.
 - Build: Stream test output to console during `gradlew test`/`build` via `testLogging.showStandardStreams`.

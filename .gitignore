@@ -7,9 +7,17 @@ out/
 *.class
 
 # IDE/editor
-.idea/
+# Shared IntelliJ config is checked in; only volatile per-user/local files are ignored.
+.idea/workspace.xml
+.idea/dataSources.local.xml
+.idea/shelf/
+.idea/sonarlint/
 .vscode/
 *.iml
 
 # Task worktrees (git worktree add ./work/Tnnnn-slug)
 work/
+
+# Logs
+*.log
+log/
