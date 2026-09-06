@@ -24,6 +24,7 @@ anything only relevant to one specific project.
 - [x] **[Read]**      Check template's `Cli.java`/test block/jar manifest against the Java/logging guidelines.
 - [x] **[Decide]**    Judge which gaps recur in both real projects (generic) vs. appear in only one (project-specific).
 - [x] **[Doc]**       File one backlog TODO per major topic (T0005-T0012), owner `@gio`, status `[?]`.
+- [x] **[Verify]**    Have a sub-agent critically review the filed TODOs before integrating.
 
 ## Execution Log
 
@@ -35,18 +36,22 @@ anything only relevant to one specific project.
     (only its private GitHub Packages repo credentials differ, correctly project-specific) — no gap there.
 
 - [2026-09-06] **[Decide]**
-  Selected 7 generic gaps (both projects independently agree) plus 1 borderline "document, don't bake in" item,
-  filed as T0005-T0012 in Backlog for @gio review.
+  Selected 8 gaps against the template's own stated guidelines and filed them as T0005-T0012 in Backlog.
   - Excluded: hinolugi-auth's Dockerfile/Cloud SQL/social-identity-provider config, hinolugi-support.java's
     Maven-publish credentials and Jetty/mail dependencies — all single-project-specific, not template material.
-  - Excluded: multi-module buildSrc pattern (T0007 candidate) since it already matches `docs/multi-module.md`.
+  - Excluded: multi-module buildSrc pattern, since it already matches `docs/multi-module.md` almost verbatim.
 
 - [2026-09-06] **[Doc]**
   Filed T0005 (Spotless formatting gate), T0006 (`testLogging.showStandardStreams`), T0007 (jar manifest
-  commit-hash + Specification-* attributes), T0008 (no reference logging implementation despite the guideline),
+  commit-hash suffix), T0008 (no reference logging implementation despite the guideline),
   T0009 (`.gitignore` missing `pickup-work-loop*.log`), T0010 (`.idea/` blanket-ignore vs. real projects'
   selective checked-in pattern), T0011 (group/version/vendor metadata inlined vs. `gradle.properties`),
   T0012 (undocumented optional library-publishing pattern) — all `[?]`, owner `@gio`, in Backlog.
+
+- [2026-09-06] **[Verify]**
+  A review sub-agent caught that T0005 and T0007 as first drafted misattributed Spotless and manifest
+  Specification-* attributes to "both real projects" when only hinolugi-support.java has them; corrected
+  both TODOs to state accurate per-project attribution before integrating.
 
 ## Validation Record
 

@@ -21,11 +21,11 @@ An overview of all tasks and their planning.
 
 ### Backlog
 
-- [?] T0005 [owner: @gio] Decide whether to add a Spotless (or equivalent) formatting/lint gate to build.gradle by default: both hinolugi-support.java and hinolugi-auth wire up 'com.diffplug.spotless' with 'check' depending on 'spotlessCheck', but the template runs no formatting or static analysis at all.
+- [?] T0005 [owner: @gio] Decide whether to add a Spotless (or equivalent) formatting/lint gate to build.gradle by default: only hinolugi-support.java wires up 'com.diffplug.spotless' with 'check' depending on 'spotlessCheck'; neither the template nor hinolugi-auth run any formatting or static analysis, despite the guideline requiring it in CI.
 
 - [?] T0006 [owner: @gio] Decide whether to add 'testLogging.showStandardStreams = true' to the template's default test block: both real projects already set it, matching the Java guideline, while the template's test block only calls 'useJUnitPlatform()'.
 
-- [?] T0007 [owner: @gio] Decide whether the jar manifest should stamp Specification-* attributes and a git-commit-hash build-metadata suffix on Implementation-Version by default: hinolugi-support.java computes 'git rev-parse --short HEAD' and appends '+<hash>' per the versioning guideline, but the template's manifest block has no such logic.
+- [?] T0007 [owner: @gio] Decide whether the jar manifest should append a git-commit-hash build-metadata suffix to Implementation-Version by default, as the versioning guideline requires: only hinolugi-support.java computes 'git rev-parse --short HEAD' and appends '+<hash>'; neither the template nor hinolugi-auth's manifests do this.
 
 - [?] T0008 [owner: @gio] Decide whether the template should ship a minimal reference logging implementation (formatted log lines, --debug, --log-file) instead of a bare Cli.java: today it only supports --verbose/help/version, while both real projects independently built their own logging wrapper (hinolugi-auth's Logs.java, hinolugi-support.java's full logging SPI) to satisfy the same guideline.
 
