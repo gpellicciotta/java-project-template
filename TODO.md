@@ -9,16 +9,30 @@ An overview of all tasks and their planning.
 > Owner: `[owner: @name]` shown only when active/blocked/needs-review.
 > Dependencies: `[needs: Tnnnn]` shown only when unresolved.
 
-**Next ID:** 0005
+**Next ID:** 0013
 
 ---
 
 ## Next Milestone
 
-- [~] T0004 [owner: @claude] Review the Java projects hinolugi-support.java and hinolugi-auth and document structural differences from this project: look at it as if these projects should have been started from this project, yet keeping in mind that this is a generic template project: we don't want to include things that are only relevant for 1 particular project. For each major topic, make a separate TODO in the backlog and mark it for review by @gio.
+*(Currently no tasks)*
 
 ---
 
 ### Backlog
 
-*(Currently no tasks)*
+- [?] T0005 [owner: @gio] Decide whether to add a Spotless (or equivalent) formatting/lint gate to build.gradle by default: both hinolugi-support.java and hinolugi-auth wire up 'com.diffplug.spotless' with 'check' depending on 'spotlessCheck', but the template runs no formatting or static analysis at all.
+
+- [?] T0006 [owner: @gio] Decide whether to add 'testLogging.showStandardStreams = true' to the template's default test block: both real projects already set it, matching the Java guideline, while the template's test block only calls 'useJUnitPlatform()'.
+
+- [?] T0007 [owner: @gio] Decide whether the jar manifest should stamp Specification-* attributes and a git-commit-hash build-metadata suffix on Implementation-Version by default: hinolugi-support.java computes 'git rev-parse --short HEAD' and appends '+<hash>' per the versioning guideline, but the template's manifest block has no such logic.
+
+- [?] T0008 [owner: @gio] Decide whether the template should ship a minimal reference logging implementation (formatted log lines, --debug, --log-file) instead of a bare Cli.java: today it only supports --verbose/help/version, while both real projects independently built their own logging wrapper (hinolugi-auth's Logs.java, hinolugi-support.java's full logging SPI) to satisfy the same guideline.
+
+- [?] T0009 [owner: @gio] Decide whether to add 'pickup-work-loop*.log' (and similar orchestrator log patterns) to the template's default .gitignore: both hinolugi-auth and hinolugi-support.java gitignore these files, but the template documents the same pickup-work-loop.py pattern without excluding its logs.
+
+- [?] T0010 [owner: @gio] Decide whether the template's .gitignore should switch from blanket-ignoring '.idea/' to the selective pattern both real projects use: checking in shared IntelliJ config while excluding only volatile files like workspace.xml, dataSources.local.xml, shelf/, and sonarlint caches.
+
+- [?] T0011 [owner: @gio] Decide whether to extract group/version/author/vendor metadata out of build.gradle into a dedicated gradle.properties file: both hinolugi-auth and hinolugi-support.java independently made this move, while the template still inlines 'group', 'version', and 'ext.vendor' directly in build.gradle.
+
+- [?] T0012 [owner: @gio] Decide whether to document (not bake in) an optional library-publishing pattern in docs/, covering the maven-publish plugin, a GitHub Packages repository block, and withJavadocJar()/withSourcesJar(): hinolugi-support.java needs all of this to be consumed by hinolugi-auth, but it's only relevant to template-derived projects that publish a reusable library.
