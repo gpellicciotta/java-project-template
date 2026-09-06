@@ -9,7 +9,7 @@ An overview of all tasks and their planning.
 > Owner: `[owner: @name]` shown only when active/blocked/needs-review.
 > Dependencies: `[needs: Tnnnn]` shown only when unresolved.
 
-**Next ID:** 0018
+**Next ID:** 0019
 
 ---
 
@@ -27,13 +27,13 @@ An overview of all tasks and their planning.
   A0012 instead — document the GitHub Packages pattern in docs/ as optional rather than a default dependency.
 - [ ] A0014 [needs: A0013] Make a new v1.1.0 release
 - [ ] T0015 [needs: A0014] Review the Java projects hinolugi-support.java, hinolugi-counters and hinolugi-auth and document structural differences from this project: look at it as if these projects should have been started from this project, yet keeping in mind that this is a generic template project: we don't want to include things that are only relevant for 1 particular project. For each major topic, make a separate TODO in the backlog and mark it for review by @gio.
-- [~] T0016 [owner: @claude] Add a `gradlew doFullRelease` that make sure the CHANGELOG is up-to-date and committed (and the latest version not released yet), then run `gradle publishMavenPublicationToGithubPackagesRepository`, mark the CHANGELOG entry with [released: {{date}}], git tag and git push origin, then gh release create. So basically, based on committed work, do everything to actually make the packages available for use.
 
 ---
 
 ### Backlog
 
 - [ ] A0017 Add scaffolded `scripts/bootstrap-dev-environment.py` and `scripts/deploy-to-production.py` per dev-guidelines' scripts-directory convention, as an example for projects derived from this template that deploy a service.
+- [ ] A0018 Fix `CliTest.createScaffoldsRenamedProject`: it still asserts scaffolded `build.gradle` contains `version = '0.0.1'`, but f2ca82e moved `version`/`group`/`author` into scaffolded `gradle.properties` instead; pre-existing failure, found while validating T0016's `checkChangelogUpToDate` (which depends on `build`).
 
 
 

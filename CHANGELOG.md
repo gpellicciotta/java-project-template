@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Add a `gradlew doFullRelease` task pipeline that verifies, publishes, tags, pushes, and creates the GitHub release.
 - Docs: Document an optional maven-publish/GitHub Packages library-publishing pattern in `docs/library-publishing.md`.
 - Build: Move `group`, `version`, and `author` out of `build.gradle` into `gradle.properties`.
 - Build: Ignore `*.log` files and `log/` directories, and switch `.idea/` to a selective ignore pattern.

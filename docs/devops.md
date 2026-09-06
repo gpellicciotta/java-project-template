@@ -68,20 +68,27 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
 
 ## 4. Release Process
 
-1. Choose the next semantic version and update `version` in `build.gradle` (the single source of truth for the jar manifest and distribution).
-2. Add a corresponding entry at the top of `CHANGELOG.md`.
-3. Perform a clean verification build:
+1. Choose the next semantic version and update `version` in `gradle.properties` (the single source of truth for
+   the jar manifest and distribution), keeping its `-pre` suffix.
+2. Add or update the corresponding `-pre` entry at the top of `CHANGELOG.md`.
+3. Commit and push that work to `master` — `doFullRelease` (below) refuses to run against an unclean tree.
+4. Run the full release pipeline:
    ```powershell
-   .\gradlew.bat clean build
+   .\gradlew.bat doFullRelease
    ```
-4. Commit changes, tag the release, and push:
-   ```bash
-   git add build.gradle CHANGELOG.md
-   git commit -m "Release v0.4.0"
-   git tag -a v0.4.0 -m "Release v0.4.0"
-   git push origin master --follow-tags
-   ```
-5. Create a GitHub Release referencing the tag and attach the packaged jar file from `build/libs/`.
+   This runs `build` (compile, Spotless, tests), then in order:
+   - `checkChangelogUpToDate` - fails if the tree is dirty, `version` has no `-pre` suffix, or `CHANGELOG.md`
+     has no matching un-released heading.
+   - `publishReleaseArtifacts` - runs `publishMavenPublicationToGithubPackagesRepository` if this project has
+     opted into `maven-publish` per `docs/library-publishing.md`; otherwise a no-op (this template ships as an
+     application, not a library, so nothing is published by default).
+   - `markChangelogReleased` - replaces the CHANGELOG's `-pre` suffix with `[released: <date>]` and commits it.
+   - `tagAndPushRelease` - tags the release commit `v<version>` and pushes the branch and tag to `origin`.
+   - `createGithubRelease` - runs `gh release create` for the new tag, using the CHANGELOG section as notes
+     (requires the [GitHub CLI](https://cli.github.com/) installed and authenticated via `gh auth login`).
+
+   Any individual step can also be run on its own (e.g. `.\gradlew.bat checkChangelogUpToDate`) to diagnose or
+   resume a failed release without repeating the steps already done.
 
 ---
 

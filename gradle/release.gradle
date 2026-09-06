@@ -1,0 +1,110 @@
+// doFullRelease: end-to-end release pipeline for this project (see docs/devops.md, section 4). Split into
+// small, independently runnable tasks rather than one monolithic task, so a failed release can be diagnosed
+// and resumed at the right step.
+//
+// Publishing to GitHub Packages is opt-in per docs/library-publishing.md - this template ships as an
+// application, not a library, so by default no `publishMavenPublicationToGithubPackagesRepository` task
+// exists. `publishReleaseArtifacts` detects that and skips rather than failing.
+
+def releaseVersion = project.version.toString()
+def releasedVersion = releaseVersion.replaceAll(/-pre$/, '')
+def changelogFile = file('CHANGELOG.md')
+def changelogHeadingPattern = ~/(?m)^## v${java.util.regex.Pattern.quote(releaseVersion)}\s*$/
+
+def runCommand = { List<String> cmd ->
+  def process = new ProcessBuilder(cmd)
+      .directory(projectDir)
+      .redirectErrorStream(true)
+      .start()
+  def output = process.inputStream.text
+  def exitCode = process.waitFor()
+  if (exitCode != 0) {
+    throw new GradleException("Command failed (exit ${exitCode}): ${cmd.join(' ')}\n${output}")
+  }
+  return output.trim()
+}
+
+def extractChangelogSection = { String changelogText, String version ->
+  def matcher = (changelogText =~ /(?ms)^## v${java.util.regex.Pattern.quote(version)}.*?\n(.*?)(?=\n## |\z)/)
+  return matcher.find() ? matcher.group(1).trim() : "Release v${version}."
+}
+
+tasks.register('checkChangelogUpToDate') {
+  group = 'release'
+  description = 'Verifies the working tree is clean and CHANGELOG.md has an un-released heading for the current version.'
+  dependsOn 'build'
+  doLast {
+    def status = runCommand(['git', 'status', '--porcelain'])
+    if (!status.isEmpty()) {
+      throw new GradleException("Working tree has uncommitted changes; commit them before releasing:\n${status}")
+    }
+    if (!releaseVersion.endsWith('-pre')) {
+      throw new GradleException("gradle.properties version '${releaseVersion}' has no '-pre' suffix; nothing to release.")
+    }
+    if (!changelogHeadingPattern.matcher(changelogFile.text).find()) {
+      throw new GradleException("CHANGELOG.md has no un-released '## v${releaseVersion}' heading.")
+    }
+  }
+}
+
+tasks.register('publishReleaseArtifacts') {
+  group = 'release'
+  description = 'Publishes to GitHub Packages if this project opted into maven-publish (see docs/library-publishing.md); no-op otherwise.'
+  dependsOn 'checkChangelogUpToDate'
+  dependsOn { tasks.findByName('publishMavenPublicationToGithubPackagesRepository') ?: [] }
+  doLast {
+    if (tasks.findByName('publishMavenPublicationToGithubPackagesRepository') == null) {
+      logger.lifecycle('No GithubPackages maven publication configured - skipping publish (see docs/library-publishing.md).')
+    }
+  }
+}
+
+tasks.register('markChangelogReleased') {
+  group = 'release'
+  description = 'Replaces the CHANGELOG -pre suffix for the current version with [released: <date>] and commits it.'
+  dependsOn 'publishReleaseArtifacts'
+  doLast {
+    def releasedDate = new Date().format('yyyy-MM-dd')
+    def text = changelogFile.text
+    def updated = changelogHeadingPattern.matcher(text).replaceFirst("## v${releasedVersion} [released: ${releasedDate}]")
+    if (updated == text) {
+      throw new GradleException("Could not find '## v${releaseVersion}' heading to update in CHANGELOG.md.")
+    }
+    changelogFile.text = updated
+    runCommand(['git', 'commit', '-am', "Released version ${releasedVersion}."])
+  }
+}
+
+tasks.register('tagAndPushRelease') {
+  group = 'release'
+  description = 'Tags the release commit as v<version> and pushes the branch and tag to origin.'
+  dependsOn 'markChangelogReleased'
+  doLast {
+    def tag = "v${releasedVersion}"
+    runCommand(['git', 'tag', tag])
+    runCommand(['git', 'push', 'origin', 'HEAD'])
+    runCommand(['git', 'push', 'origin', tag])
+  }
+}
+
+tasks.register('createGithubRelease') {
+  group = 'release'
+  description = 'Creates a GitHub release for the new tag via the gh CLI, using the CHANGELOG section as notes.'
+  dependsOn 'tagAndPushRelease'
+  doLast {
+    def tag = "v${releasedVersion}"
+    def notesFile = File.createTempFile('release-notes-', '.md')
+    notesFile.text = extractChangelogSection(changelogFile.text, releasedVersion)
+    try {
+      runCommand(['gh', 'release', 'create', tag, '--title', tag, '--notes-file', notesFile.path])
+    } finally {
+      notesFile.delete()
+    }
+  }
+}
+
+tasks.register('doFullRelease') {
+  group = 'release'
+  description = 'End-to-end release: verify CHANGELOG, publish if configured, mark released, tag, push, and create the GitHub release.'
+  dependsOn 'createGithubRelease'
+}
