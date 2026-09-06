@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Docs: Document an optional maven-publish/GitHub Packages library-publishing pattern in `docs/library-publishing.md`.
 - Build: Move `group`, `version`, and `author` out of `build.gradle` into `gradle.properties`.
 - Build: Ignore `*.log` files and `log/` directories, and switch `.idea/` to a selective ignore pattern.
 - CLI: Add a minimal reference logging implementation (`Log.java`) with `--debug` and `--log-file` options.
