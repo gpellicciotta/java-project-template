@@ -25,7 +25,7 @@ An overview of all tasks and their planning.
   Please decide: (a) proceed anyway since derived projects are expected to stay in the private hinolugi family,
   and add the `HINOLUGI_PACKAGES_TOKEN` CI secret, or (b) make hinolugi-support.java public first, or (c) follow
   A0012 instead — document the GitHub Packages pattern in docs/ as optional rather than a default dependency.
-- [ ] A0009 The template's default .gitignore should ignore all *.log files and any files in log/.
+- [~] A0009 [owner: @claude] The template's default .gitignore should ignore all *.log files and any files in log/.
   It should switch from blanket-ignoring '.idea/' to the selective pattern both real projects use: checking in shared IntelliJ config while excluding only volatile files like workspace.xml, dataSources.local.xml, shelf/, and sonarlint caches.
 - [ ] A0011 Extract group/version/author/vendor metadata out of build.gradle into a dedicated gradle.properties file: both hinolugi-auth and hinolugi-support.java independently made this move, while the template still inlines 'group', 'version', and 'ext.vendor' directly in build.gradle.
 - [ ] A0012 Document (not bake in) an optional library-publishing pattern in docs/, covering the maven-publish plugin, a GitHub Packages repository block, and withJavadocJar()/withSourcesJar(): hinolugi-support.java needs all of this to be consumed by hinolugi-auth, but it's only relevant to template-derived projects that publish a reusable library.
