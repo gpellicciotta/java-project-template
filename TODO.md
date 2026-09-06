@@ -9,7 +9,7 @@ An overview of all tasks and their planning.
 > Owner: `[owner: @name]` shown only when active/blocked/needs-review.
 > Dependencies: `[needs: Tnnnn]` shown only when unresolved.
 
-**Next ID:** 0017
+**Next ID:** 0018
 
 ---
 
@@ -34,6 +34,8 @@ An overview of all tasks and their planning.
 ---
 
 ### Backlog
+
+- [ ] A0017 Add scaffolded `scripts/bootstrap-dev-environment.py` and `scripts/deploy-to-production.py` per dev-guidelines' scripts-directory convention, as an example for projects derived from this template that deploy a service.
 
 
 
