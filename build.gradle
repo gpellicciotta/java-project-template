@@ -3,9 +3,9 @@ plugins {
   id 'com.diffplug.spotless' version '8.10.1'
 }
 
-group      = 'com.hinolugi'
-version    = '1.0.1-pre' // Single source of truth - read back at runtime via the jar manifest, see Cli.java
-ext.vendor = 'Giovanni Pellicciotta' // Single source of truth for the copyright name - see Cli.java
+// group, version, and author are read from gradle.properties - the single source of truth, read back at
+// runtime via the jar manifest, see Cli.java.
+ext.vendor = author // Copyright name for the jar manifest - see Cli.java
 
 repositories {
   mavenCentral()

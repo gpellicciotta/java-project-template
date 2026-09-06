@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Move `group`, `version`, and `author` out of `build.gradle` into `gradle.properties`.
 - Build: Ignore `*.log` files and `log/` directories, and switch `.idea/` to a selective ignore pattern.
 - CLI: Add a minimal reference logging implementation (`Log.java`) with `--debug` and `--log-file` options.
 - Build: Append `+<git-commit-hash>` build metadata to the jar's `Implementation-Version` by default.
