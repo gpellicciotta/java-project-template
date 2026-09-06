@@ -1,5 +1,6 @@
 plugins {
   id 'application'
+  id 'com.diffplug.spotless' version '8.10.1'
 }
 
 group      = 'com.hinolugi'
@@ -32,6 +33,24 @@ application {
 
 test {
   useJUnitPlatform()
+}
+
+// Formatting: normalizes whitespace only (trailing whitespace, final newline, tabs-to-spaces), deliberately
+// not a full reformatter (googleJavaFormat/eclipse). `check` already depends on `spotlessCheck` via the
+// plugin's own wiring.
+spotless {
+  java {
+    target 'src/**/*.java'
+    trimTrailingWhitespace()
+    endWithNewline()
+    leadingTabsToSpaces(2)
+  }
+  groovyGradle {
+    target '*.gradle'
+    trimTrailingWhitespace()
+    endWithNewline()
+    leadingTabsToSpaces(2)
+  }
 }
 
 // Stamps the resolved project version (and vendor/copyright name) into the jar manifest so Cli.java can read

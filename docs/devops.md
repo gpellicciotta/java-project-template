@@ -89,5 +89,5 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
 
 The GitHub Actions workflow in `.github/workflows/ci.yml` triggers on push and pull requests, executing:
 - Java JDK 25 setup.
-- `./gradlew build` (compilation, unit testing, and packaging).
+- `./gradlew build` (compilation, unit testing, packaging, and a Spotless formatting check via `check`).
 
