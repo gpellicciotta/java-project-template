@@ -71,10 +71,10 @@ This initializes a git repo (if one doesn't already exist) and runs `gradlew bui
 ## CLI
 
 ```powershell
-java -jar build/libs/template-project-1.0.0.jar help
-java -jar build/libs/template-project-1.0.0.jar version
-java -jar build/libs/template-project-1.0.0.jar greet <name>
-java -jar build/libs/template-project-1.0.0.jar create <project-name> [-o <output-dir>]
+java -jar build/libs/template-project-<version>.jar help
+java -jar build/libs/template-project-<version>.jar version
+java -jar build/libs/template-project-<version>.jar greet <name>
+java -jar build/libs/template-project-<version>.jar create <project-name> [-o <output-dir>]
 ```
 
 `create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory if `-o` is omitted), automating the renames described below in **Starting a new project from this template**. Run it from within a checkout of this template (i.e. after `. .\setup.ps1` or `gradlew build` in this repo). `create` locates the template root by walking up from wherever its own compiled class was loaded from.

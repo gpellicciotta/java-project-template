@@ -39,14 +39,17 @@ Clone the repository and run the setup script:
 ```
 
 ### 2.3. Task Coordination Protocol
-All non-trivial task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md):
-1. **Claim**: Update the task line in `TODO.md` on `master` from `[ ]` to `[~] @owner`, commit, and push.
-2. **Worktree**: Create an isolated worktree at `./work/Tnnnn-slug` on branch `task/Tnnnn-slug`:
-   ```bash
-   git worktree add ./work/T0001-task-slug -b task/T0001-task-slug
-   ```
-3. **Execute**: Work within the isolated worktree and maintain `tasks/Tnnnn-slug.md`.
-4. **Finalize**: Pass all tests, update documentation and `CHANGELOG.md`, integrate into mainline, remove the worktree and branch, and clear the entry from `TODO.md`.
+All task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md).
+Task weight depends on isolation and tracking needs:
+- **Full task (`Tnnnn`)**: needs a branch/worktree, a dedicated plan, or progress tracking.
+  1. **Claim**: On `master`, change the line in `TODO.md` from `[ ]` to `[~] [owner: @name]`, commit, push. First
+     fast-forward push wins; on rejection, re-fetch and pick a different task.
+  2. **Worktree**: `git worktree add ./work/Tnnnn-slug -b task/Tnnnn-slug`.
+  3. **Execute**: Work only inside that worktree; maintain `tasks/Tnnnn-slug.md`.
+  4. **Finalize**: Pass all tests, update documentation and `CHANGELOG.md`, integrate into mainline in a single
+     commit, remove the worktree/branch, and clear the entry from `TODO.md`.
+- **Adhoc task (`Annnn`)**: completable by one actor in one sitting with low collision risk — no branch or
+  worktree, edited directly in the primary checkout, same claim-then-integrate commit flow as above.
 
 ---
 
@@ -55,7 +58,7 @@ All non-trivial task work follows the protocol in [Coordinating Work Guidelines]
 To create a new project from this template:
 ```powershell
 # Using the CLI
-java -jar build/libs/template-project-1.0.0.jar create my-new-tool -o C:\Dev-Projects
+java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev-Projects
 
 # Or via Gradle run
 .\gradlew.bat run --args="create my-new-tool -o C:\Dev-Projects"
