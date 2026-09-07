@@ -27,7 +27,7 @@ An overview of all tasks and their planning.
   A0012 instead — document the GitHub Packages pattern in docs/ as optional rather than a default dependency.
 - [ ] A0014 [needs: A0013] Make a new v1.1.0 release
 - [ ] T0015 [needs: A0014] Review the Java projects hinolugi-support.java, hinolugi-counters and hinolugi-auth and document structural differences from this project: look at it as if these projects should have been started from this project, yet keeping in mind that this is a generic template project: we don't want to include things that are only relevant for 1 particular project. For each major topic, make a separate TODO in the backlog and mark it for review by @gio.
-- [ ] A0018 Fix `CliTest.createScaffoldsRenamedProject`: it still asserts scaffolded `build.gradle` contains `version = '0.0.1'`, but f2ca82e moved `version`/`group`/`author` into scaffolded `gradle.properties` instead; pre-existing failure, found while validating T0016's `checkChangelogUpToDate` (which depends on `build`).
+- [~] A0018 [owner: @claude] Fix `CliTest.createScaffoldsRenamedProject`: it still asserts scaffolded `build.gradle` contains `version = '0.0.1'`, but f2ca82e moved `version`/`group`/`author` into scaffolded `gradle.properties` instead; pre-existing failure, found while validating T0016's `checkChangelogUpToDate` (which depends on `build`).
 
 ---
 
