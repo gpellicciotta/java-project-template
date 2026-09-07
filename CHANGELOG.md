@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.1.1-pre
+- Build: `doFullRelease` now atomically bumps `gradle.properties` and opens the next `-pre` CHANGELOG heading after tagging.
 
 ## v1.1.0 [released: 2026-09-07]
 - Build: Add `com.hinolugi:hinolugi-support` as a default GitHub Packages dependency; requires `read:packages` credentials to build.

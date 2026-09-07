@@ -93,6 +93,9 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
    - `tagAndPushRelease` - tags the release commit `v<version>` and pushes the branch and tag to `origin`.
    - `createGithubRelease` - runs `gh release create` for the new tag, using the CHANGELOG section as notes
      (requires the [GitHub CLI](https://cli.github.com/) installed and authenticated via `gh auth login`).
+   - `openNextPreRelease` - bumps `gradle.properties` to the next patch `-pre` version, opens a matching
+     `CHANGELOG.md` heading, and commits and pushes — so the tree is ready for further development with no
+     manual follow-up step.
 
    Any individual step can also be run on its own (e.g. `.\gradlew.bat checkChangelogUpToDate`) to diagnose or
    resume a failed release without repeating the steps already done.

@@ -9,7 +9,12 @@
 def releaseVersion = project.version.toString()
 def releasedVersion = releaseVersion.replaceAll(/-pre$/, '')
 def changelogFile = file('CHANGELOG.md')
+def propertiesFile = file('gradle.properties')
 def changelogHeadingPattern = ~/(?m)^## v${java.util.regex.Pattern.quote(releaseVersion)}\s*$/
+def nextPreVersion = {
+  def parts = releasedVersion.split(/\./)
+  "${parts[0]}.${parts[1]}.${parts[2].toInteger() + 1}-pre"
+}()
 
 def runCommand = { List<String> cmd ->
   // .toString() each element: ProcessBuilder requires real java.lang.String entries, and a GString (e.g. from
@@ -105,8 +110,32 @@ tasks.register('createGithubRelease') {
   }
 }
 
+tasks.register('openNextPreRelease') {
+  group = 'release'
+  description = 'Bumps gradle.properties and opens a new CHANGELOG.md heading for the next patch -pre version, then commits and pushes.'
+  dependsOn 'createGithubRelease'
+  doLast {
+    def propsText = propertiesFile.text
+    def updatedProps = propsText.replaceFirst(/(?m)^version=.*$/, "version=${nextPreVersion}")
+    if (updatedProps == propsText) {
+      throw new GradleException("Could not find 'version=' line to update in gradle.properties.")
+    }
+    propertiesFile.text = updatedProps
+
+    def text = changelogFile.text
+    def updated = text.replaceFirst(/(?m)^---\n\n/, "---\n\n## v${nextPreVersion}\n\n")
+    if (updated == text) {
+      throw new GradleException("Could not find '---' separator to insert the new heading into CHANGELOG.md.")
+    }
+    changelogFile.text = updated
+
+    runCommand(['git', 'commit', '-am', "Opened v${nextPreVersion} for further development."])
+    runCommand(['git', 'push', 'origin', 'HEAD'])
+  }
+}
+
 tasks.register('doFullRelease') {
   group = 'release'
-  description = 'End-to-end release: verify CHANGELOG, publish if configured, mark released, tag, push, and create the GitHub release.'
-  dependsOn 'createGithubRelease'
+  description = 'End-to-end release: verify CHANGELOG, publish if configured, mark released, tag, push, create the GitHub release, and open the next -pre version.'
+  dependsOn 'openNextPreRelease'
 }
