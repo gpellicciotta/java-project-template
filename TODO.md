@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] A0019 Make doFullRelease atomically open the next patch `-pre` CHANGELOG heading and bump `gradle.properties` after tagging, instead of leaving that as a manual follow-up step.
+- [~] A0019 [owner: @claude] Make doFullRelease atomically open the next patch `-pre` CHANGELOG heading and bump `gradle.properties` after tagging, instead of leaving that as a manual follow-up step.
 
 ---
 
