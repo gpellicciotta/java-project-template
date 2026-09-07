@@ -12,7 +12,7 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v1.1.0-pre
+## v1.1.0 [released: 2026-09-07]
 - Build: Add `com.hinolugi:hinolugi-support` as a default GitHub Packages dependency; requires `read:packages` credentials to build.
 - Build: Fix scaffolding to reset the new project's version in `gradle.properties` instead of stale `build.gradle`.
 - DevEx: Replace `setup.ps1` with cross-platform `scripts/bootstrap-dev-environment.py` and a scaffolded `scripts/deploy-to-production.py` example.
