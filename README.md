@@ -144,6 +144,6 @@ To do it by hand instead: copy this folder, then rename every occurrence of the 
 - `settings.gradle`'s `rootProject.name = 'template-project'`
 - This README's title, and `CLAUDE.md`'s placeholder sections
 - `CHANGELOG.md` — replace the version history with your project's initial entry
-- `build.gradle`'s `version` — reset to `0.0.1` (or your own starting point)
+- `gradle.properties`'s `version` — reset to `0.0.1` (or your own starting point)
 
 Then follow **Quick Start** above to verify the rename didn't break anything before writing real code.

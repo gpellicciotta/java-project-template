@@ -173,8 +173,10 @@ class CliTest
     }
 
     String buildGradle = Files.readString(destination.resolve("build.gradle"), StandardCharsets.UTF_8);
-    assertTrue(buildGradle.contains("version = '0.0.1'"));
     assertTrue(buildGradle.contains("mainClass = 'sample_app.Cli'"));
+
+    String gradleProperties = Files.readString(destination.resolve("gradle.properties"), StandardCharsets.UTF_8);
+    assertTrue(gradleProperties.contains("version=0.0.1"));
 
     String readme = Files.readString(destination.resolve("README.md"), StandardCharsets.UTF_8);
     assertTrue(readme.contains("Sample App"));

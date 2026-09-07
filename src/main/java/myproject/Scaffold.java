@@ -192,14 +192,14 @@ public final class Scaffold
     }
   }
 
-  private static void resetBuildGradleVersion(Path destination) throws ScaffoldException {
-    Path buildGradle = destination.resolve("build.gradle");
+  private static void resetGradlePropertiesVersion(Path destination) throws ScaffoldException {
+    Path gradleProperties = destination.resolve("gradle.properties");
     try {
-      String text = Files.readString(buildGradle, StandardCharsets.UTF_8);
-      String newText = text.replaceFirst("(?m)^version\\s*=\\s*'[^']*'", "version = '0.0.1'");
-      Files.writeString(buildGradle, newText, StandardCharsets.UTF_8);
+      String text = Files.readString(gradleProperties, StandardCharsets.UTF_8);
+      String newText = text.replaceFirst("(?m)^version\\s*=\\s*.*$", "version=0.0.1");
+      Files.writeString(gradleProperties, newText, StandardCharsets.UTF_8);
     } catch (IOException e) {
-      throw new ScaffoldException("Failed to reset build.gradle's version: " + e.getMessage());
+      throw new ScaffoldException("Failed to reset gradle.properties's version: " + e.getMessage());
     }
   }
 
@@ -209,7 +209,7 @@ public final class Scaffold
    * <p>Automates the manual steps documented in this template's README under "Starting a new project from
    * this template": copy the tree, rename the {@code myproject} package (in both {@code src/main} and
    * {@code src/test}), replace the {@code template-project} / {@code java-template-project} name placeholders
-   * throughout, and reset {@code CHANGELOG.md}, {@code TODO.md}, and {@code build.gradle}'s {@code version} -
+   * throughout, and reset {@code CHANGELOG.md}, {@code TODO.md}, and {@code gradle.properties}'s {@code version} -
    * the new project starts its own history rather than inheriting the template's.
    */
   public static Path createProject(String projectName, String outputDir) throws ScaffoldException {
@@ -242,7 +242,7 @@ public final class Scaffold
 
     writeFreshChangelogMd(destination, title);
     writeFreshTodoMd(destination);
-    resetBuildGradleVersion(destination);
+    resetGradlePropertiesVersion(destination);
 
     return destination;
   }
