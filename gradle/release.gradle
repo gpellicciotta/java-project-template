@@ -12,7 +12,9 @@ def changelogFile = file('CHANGELOG.md')
 def changelogHeadingPattern = ~/(?m)^## v${java.util.regex.Pattern.quote(releaseVersion)}\s*$/
 
 def runCommand = { List<String> cmd ->
-  def process = new ProcessBuilder(cmd)
+  // .toString() each element: ProcessBuilder requires real java.lang.String entries, and a GString (e.g. from
+  // "...${var}..." interpolation) fails ProcessBuilder's internal toArray(String[]) with an ArrayStoreException.
+  def process = new ProcessBuilder(cmd.collect { it.toString() })
       .directory(projectDir)
       .redirectErrorStream(true)
       .start()
