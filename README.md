@@ -46,7 +46,9 @@ java-template-project/
   settings.gradle           # rootProject.name
   .gitignore
   .editorconfig             # indent/charset/line-ending settings
-  setup.ps1                 # one-shot bootstrap: git init, gradlew build
+  scripts/
+    bootstrap-dev-environment.py  # one-shot bootstrap: git init, gradlew build
+    deploy-to-production.py       # scaffolded example deploy script (placeholder)
   CLAUDE.md                 # AI assistant guidance
 ```
 
@@ -54,15 +56,19 @@ java-template-project/
 
 Java uses the standard `src/main/java/{{package}}` + `src/test/java/{{package}}` layout (the Maven/Gradle default, and what every Java IDE expects out of the box).
 
-## Quick Start (Windows PowerShell)
+## Quick Start
 
-Open PowerShell in the project root and run:
+Open a shell in the project root and run:
 
-```powershell
-. .\setup.ps1
+```shell
+python scripts/bootstrap-dev-environment.py
 ```
 
 This initializes a git repo (if one doesn't already exist) and runs `gradlew build`, which compiles the code, runs the test suite, and produces a jar in `build/libs/`.
+
+`scripts/deploy-to-production.py` is a scaffolded placeholder for the dev-guidelines scripts-directory
+convention: this template has no production service, so it just prints guidance. Projects derived from
+this template that do deploy a service should replace its body with their real deployment steps.
 
 ## Running Tests
 
@@ -79,7 +85,7 @@ java -jar build/libs/template-project-<version>.jar greet <name>
 java -jar build/libs/template-project-<version>.jar create <project-name> [-o <output-dir>]
 ```
 
-`create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory if `-o` is omitted), automating the renames described below in **Starting a new project from this template**. Run it from within a checkout of this template (i.e. after `. .\setup.ps1` or `gradlew build` in this repo). `create` locates the template root by walking up from wherever its own compiled class was loaded from.
+`create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory if `-o` is omitted), automating the renames described below in **Starting a new project from this template**. Run it from within a checkout of this template (i.e. after `python scripts/bootstrap-dev-environment.py` or `gradlew build` in this repo). `create` locates the template root by walking up from wherever its own compiled class was loaded from.
 
 For a development run without building or naming the jar, use `.\gradlew.bat run --args="<command> [args]"`.
 

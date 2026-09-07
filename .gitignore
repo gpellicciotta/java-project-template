@@ -6,6 +6,10 @@ out/
 # Compiled class files
 *.class
 
+# Python
+__pycache__/
+*.pyc
+
 # IDE/editor
 # Shared IntelliJ config is checked in; only volatile per-user/local files are ignored.
 .idea/workspace.xml

@@ -16,16 +16,19 @@ Practical guidance on building, testing, developing, and releasing for `java-pro
 ## 2. Development Workflows
 
 ### 2.1. Initial Bootstrap
-Clone the repository and run the setup script:
-```powershell
-# Windows
-. .\setup.ps1
-
-# POSIX (Linux/macOS)
-./gradlew build
+Clone the repository and run the bootstrap script:
+```shell
+python scripts/bootstrap-dev-environment.py
 ```
+This initializes a git repo (if one doesn't already exist) and runs `gradlew build`.
 
-### 2.2. Building and Testing
+### 2.2. Deploying a Service
+`scripts/deploy-to-production.py` is a scaffolded placeholder per the dev-guidelines scripts-directory
+convention. This template ships as a standalone CLI jar with no production service, so the script just
+prints guidance; projects derived from this template that deploy a service should replace its body with
+their real deployment steps.
+
+### 2.3. Building and Testing
 ```powershell
 # Run tests only
 .\gradlew.bat test
@@ -38,7 +41,7 @@ Clone the repository and run the setup script:
 .\gradlew.bat run --args="greet Gio"
 ```
 
-### 2.3. Task Coordination Protocol
+### 2.4. Task Coordination Protocol
 All task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md).
 Task weight depends on isolation and tracking needs:
 - **Full task (`Tnnnn`)**: needs a branch/worktree, a dedicated plan, or progress tracking.

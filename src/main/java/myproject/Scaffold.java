@@ -30,7 +30,7 @@ public final class Scaffold
 
   private static final List<String> MARKER_FILES = List.of("build.gradle", "TODO.md", "CHANGELOG.md");
   private static final Set<String> EXCLUDED_NAMES = Set.of(
-      ".git", ".gradle", "build", "out", ".idea", ".vscode", "work"
+      ".git", ".gradle", "build", "out", ".idea", ".vscode", "work", "__pycache__"
   );
 
   /**
