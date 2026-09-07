@@ -13,6 +13,7 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.0.1-pre
+- Build: Add `com.hinolugi:hinolugi-support` as a default GitHub Packages dependency; requires `read:packages` credentials to build.
 - Build: Fix scaffolding to reset the new project's version in `gradle.properties` instead of stale `build.gradle`.
 - DevEx: Replace `setup.ps1` with cross-platform `scripts/bootstrap-dev-environment.py` and a scaffolded `scripts/deploy-to-production.py` example.
 - Build: Add a `gradlew doFullRelease` task pipeline that verifies, publishes, tags, pushes, and creates the GitHub release.

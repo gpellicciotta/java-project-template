@@ -11,4 +11,7 @@ jobs:
           distribution: 'temurin'
           java-version: '25'
       - name: Build and test
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.HINOLUGI_PACKAGES_TOKEN }}
         run: ./gradlew build

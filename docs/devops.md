@@ -10,6 +10,10 @@ Practical guidance on building, testing, developing, and releasing for `java-pro
 - **Gradle**: Gradle 9.x (managed via the included Gradle wrapper `./gradlew` / `gradlew.bat`).
 - **Git**: Git 2.30+ supporting worktrees (`git worktree`).
 - **PowerShell / Bash**: PowerShell on Windows, standard POSIX shell on macOS/Linux.
+- **GitHub Packages access**: `build.gradle` depends on `com.hinolugi:hinolugi-support`, hosted on the private
+  `gpellicciotta/hinolugi-support.java` GitHub Packages repo. Local builds need a GitHub PAT with `read:packages`
+  set as `github.token` (and `github.username`) in `{user.home}/.gradle/gradle.properties`, or the
+  `GITHUB_USERNAME`/`GITHUB_TOKEN` env vars. CI reads the PAT from the `HINOLUGI_PACKAGES_TOKEN` repo secret.
 
 ---
 

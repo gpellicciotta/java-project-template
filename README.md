@@ -58,6 +58,11 @@ Java uses the standard `src/main/java/{{package}}` + `src/test/java/{{package}}`
 
 ## Quick Start
 
+`build.gradle` depends on `com.hinolugi:hinolugi-support`, hosted on the private `hinolugi-support.java` GitHub
+Packages repo. Set a GitHub PAT with `read:packages` as `github.token`/`github.username` in
+`{user.home}/.gradle/gradle.properties`, or as the `GITHUB_USERNAME`/`GITHUB_TOKEN` env vars, before building
+(see `docs/devops.md`, section 1).
+
 Open a shell in the project root and run:
 
 ```shell
