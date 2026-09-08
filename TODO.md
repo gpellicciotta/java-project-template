@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] T0023 Decide whether to add standard Gradle flags (caching, warning.mode, console, logging.level=info) and copyright to gradle.properties: all three real projects set logging.level=info and two configure build caching. **[Decided]**: Yes
+- [~] T0023 [owner: @codex] Standardize Gradle caching, warnings, console output, info logging, and copyright metadata.
 - [ ] T0024 Decide whether to update docs/multi-module.md with the 3-tier buildSrc layout (common, library, application) and settings.gradle mapping: both real multi-module projects independently use this structure. **[Decided]**: Yes
 - [ ] T0025 Decide whether to expand .gitattributes and .editorconfig to normalize *.cmd/*.sh scripts and declare common binary file types: hinolugi-counters explicitly normalizes scripts and 15 binary formats, whereas the template only covers *.bat. **[Decided]**: Yes
 - [ ] T0026 Decide whether to update Scaffold.java to adhere to Dev Guidelines: it currently emits CHANGELOG.md with '[in development]' instead of '-pre', resets version to '0.0.1' instead of '0.1.0-pre', and omits '**Next ID:** 0001' from TODO.md. **[Decided]**: Yes
