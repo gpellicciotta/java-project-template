@@ -39,6 +39,22 @@ prints guidance; projects derived from this template that deploy a service shoul
 their real deployment steps.
 
 ### Building and Testing
+
+The root [gradle.properties](../gradle.properties) defines shared build defaults:
+
+- `org.gradle.caching=true` reuses eligible task outputs through Gradle's local build cache.
+- `org.gradle.warning.mode=all` displays each warning.
+- `org.gradle.console=rich` enables colored output and progress indicators.
+- `org.gradle.logging.level=info` includes detailed build diagnostics.
+
+For plain automation logs, run `./gradlew build --console=plain` (Windows: `.\gradlew.bat build --console=plain`).
+Use `--no-build-cache`, `--warning-mode=summary`, or `--quiet` to override individual defaults for one invocation.
+See the [Gradle build environment reference](https://docs.gradle.org/current/userguide/build_environment.html) for property precedence and supported values.
+
+The same properties file stores `author` and a literal `copyright` notice for derived projects and build consumers.
+Update both when changing ownership; `copyright` does not interpolate `author`.
+The existing CLI copyright and JAR vendor continue to derive from `author`.
+
 ```powershell
 # Run tests only
 .\gradlew.bat test

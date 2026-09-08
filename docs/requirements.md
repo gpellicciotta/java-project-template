@@ -45,6 +45,8 @@ Functional and technical requirements for the `java-project-template` project.
 
 - **Java Version**: Explicitly targeted and compiled with Java 25 toolchain (`java.toolchain`).
 - **Build System**: Gradle with pinned Gradle wrapper (`gradlew` / `gradlew.bat`).
+- **Build Defaults**: Enable build caching, all warnings, rich console output, and info logging through root Gradle properties.
+- **Ownership Metadata**: Declare author and a literal copyright notice in `gradle.properties` for derived projects.
 - **Testing**: JUnit 5 Jupiter test framework with JUnit platform launcher.
 - **Packaging**: Standard application plugin configuration generating runnable jar archives with manifest attributes (`Main-Class`, `Implementation-Title`, `Implementation-Version`, `Implementation-Vendor`).
 - **Companion Archives**: Generate source and Javadoc jars during `build`, including subprojects using the documented common convention.
