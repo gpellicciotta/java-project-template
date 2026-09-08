@@ -15,7 +15,6 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [~] T0021 [owner: @codex] Configure Javadoc with HTML5 output, disabled doclint, and quiet generation.
 - [ ] T0022 Decide whether to replace the blanket .vscode/ ignore in .gitignore with a selective pattern and track shared settings.json: all three real projects commit .vscode/settings.json, but the template's .gitignore blanket-ignores it. **[Decided]**: Yes
 - [ ] T0023 Decide whether to add standard Gradle flags (caching, warning.mode, console, logging.level=info) and copyright to gradle.properties: all three real projects set logging.level=info and two configure build caching. **[Decided]**: Yes
 - [ ] T0024 Decide whether to update docs/multi-module.md with the 3-tier buildSrc layout (common, library, application) and settings.gradle mapping: both real multi-module projects independently use this structure. **[Decided]**: Yes

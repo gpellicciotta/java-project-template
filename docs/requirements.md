@@ -48,4 +48,5 @@ Functional and technical requirements for the `java-project-template` project.
 - **Testing**: JUnit 5 Jupiter test framework with JUnit platform launcher.
 - **Packaging**: Standard application plugin configuration generating runnable jar archives with manifest attributes (`Main-Class`, `Implementation-Title`, `Implementation-Version`, `Implementation-Vendor`).
 - **Companion Archives**: Generate source and Javadoc jars during `build`, including subprojects using the documented common convention.
+- **Javadoc**: Generate HTML5 documentation with doclint disabled and quiet output; retain failure on Javadoc errors.
 - **Code Standards**: 2-space indentation, UTF-8 encoding, LF line endings, US English.

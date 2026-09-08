@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- Build: Configure HTML5 Javadoc with disabled doclint and quiet generation, including shared Java conventions.
 - Build: Generate source and Javadoc archives by default and preserve them in shared multi-project conventions.
 - Build: `doFullRelease` now atomically bumps `gradle.properties` and opens the next `-pre` CHANGELOG heading after tagging.
 

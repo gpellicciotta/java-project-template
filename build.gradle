@@ -40,6 +40,12 @@ java {
   withSourcesJar()
 }
 
+// Generate HTML5 documentation without doclint diagnostics or Javadoc progress messages.
+javadoc {
+  options.addBooleanOption('html5', true)
+  options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 application {
   mainClass = 'myproject.Cli'
 }

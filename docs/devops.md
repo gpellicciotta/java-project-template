@@ -47,6 +47,8 @@ their real deployment steps.
 
 The build writes the main jar, `-sources.jar`, and `-javadoc.jar` to `build/libs/`.
 Run `sourcesJar` or `javadocJar` to generate either companion archive individually.
+Javadoc explicitly uses HTML5 output with `-Xdoclint:none` and `-quiet`.
+This disables documentation lint diagnostics and suppresses generation progress messages; Javadoc errors still fail the build.
 
 ### Task Coordination Protocol
 All task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md).

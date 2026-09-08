@@ -48,6 +48,11 @@ java {
   withSourcesJar()
 }
 
+javadoc {
+  options.addBooleanOption('html5', true)
+  options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 test {
   useJUnitPlatform()
 }
@@ -67,6 +72,7 @@ plugins {
 subprojects that are libraries other subprojects depend on.)
 
 The common convention preserves the template's source and Javadoc archives for every Java subproject.
+Javadoc uses HTML5 output, disables doclint, and suppresses generation progress messages.
 Each subproject's `build` produces `-sources.jar` and `-javadoc.jar` alongside its main jar in its `build/libs/` directory.
 
 Each subproject's own `build.gradle` then shrinks to just `apply plugin: '<group>.java-application-conventions'`
