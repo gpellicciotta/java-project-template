@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] T0022 Decide whether to replace the blanket .vscode/ ignore in .gitignore with a selective pattern and track shared settings.json: all three real projects commit .vscode/settings.json, but the template's .gitignore blanket-ignores it. **[Decided]**: Yes
+- [~] T0022 [owner: @codex] Replace the blanket VS Code ignore with selective patterns and track shared workspace settings.
 - [ ] T0023 Decide whether to add standard Gradle flags (caching, warning.mode, console, logging.level=info) and copyright to gradle.properties: all three real projects set logging.level=info and two configure build caching. **[Decided]**: Yes
 - [ ] T0024 Decide whether to update docs/multi-module.md with the 3-tier buildSrc layout (common, library, application) and settings.gradle mapping: both real multi-module projects independently use this structure. **[Decided]**: Yes
 - [ ] T0025 Decide whether to expand .gitattributes and .editorconfig to normalize *.cmd/*.sh scripts and declare common binary file types: hinolugi-counters explicitly normalizes scripts and 15 binary formats, whereas the template only covers *.bat. **[Decided]**: Yes
