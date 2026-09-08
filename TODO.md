@@ -15,7 +15,6 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [~] T0024 [owner: @codex] Document common, library, and application buildSrc conventions with explicit settings.gradle project mapping.
 - [ ] T0025 Decide whether to expand .gitattributes and .editorconfig to normalize *.cmd/*.sh scripts and declare common binary file types: hinolugi-counters explicitly normalizes scripts and 15 binary formats, whereas the template only covers *.bat. **[Decided]**: Yes
 - [ ] T0026 Decide whether to update Scaffold.java to adhere to Dev Guidelines: it currently emits CHANGELOG.md with '[in development]' instead of '-pre', resets version to '0.0.1' instead of '0.1.0-pre', and omits '**Next ID:** 0001' from TODO.md. **[Decided]**: Yes
 - [ ] T0027 Decide whether to add .env, `**/*.env`, and bin/ to .gitignore: all three real projects explicitly ignore .env secrets and bin/ compiler output, both currently missing from the template's .gitignore. **[Decided]**: Yes

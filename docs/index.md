@@ -13,7 +13,7 @@ Overview of all documentation and specifications for this project.
 
 ## Architecture & Design Notes
 
-- [Multi-Module Gradle Projects](multi-module.md): Guidance and minimal convention plugin pattern for splitting into a multi-project Gradle build.
+- [Multi-Module Gradle Projects](multi-module.md): Common, library, and application conventions, explicit directory mapping, and migration checks.
 - [Publishing a Reusable Library](library-publishing.md): Optional maven-publish and GitHub Packages pattern for template-derived library projects.
 
 ---

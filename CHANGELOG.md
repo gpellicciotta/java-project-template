@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- Docs: Explain common, library, and application Gradle conventions with explicit project mapping and module migration examples.
 - Build: Enable caching, all warnings, rich console output, and info logging; provide copyright metadata in Gradle properties.
 - DevEx: Share portable VS Code Java build synchronization settings while keeping other editor-local files ignored.
 - Build: Configure HTML5 Javadoc with disabled doclint and quiet generation, including shared Java conventions.
