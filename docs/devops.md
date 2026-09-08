@@ -32,6 +32,16 @@ The shared [.vscode/settings.json](../.vscode/settings.json) enables automatic J
 Keep shared settings portable; configure machine-specific JDK paths and personal preferences in VS Code user settings.
 Other files and directories under `.vscode/` remain ignored by default, including in nested modules.
 
+### Line Endings and Binary Assets
+
+[.gitattributes](../.gitattributes) normalizes text to LF in Git and checks out `.bat` and `.cmd` scripts with CRLF.
+Shell scripts (`.sh`) and `gradlew` use LF; `gradlew.bat` uses CRLF.
+[.editorconfig](../.editorconfig) applies matching line endings when saving scripts in compatible editors.
+
+Git treats `.png`, `.jpg`, `.jpeg`, `.gif`, `.ico`, `.pdf`, `.docx`, `.jar`, `.war`, `.class`,
+`.woff`, `.woff2`, `.ttf`, and `.eot` files as binary, disabling text conversion, text diffs, and text merging.
+The general `.jar` rule also protects the Gradle wrapper JAR.
+
 ### Deploying a Service
 `scripts/deploy-to-production.py` is a scaffolded placeholder per the dev-guidelines scripts-directory
 convention. This template ships as a standalone CLI jar with no production service, so the script just

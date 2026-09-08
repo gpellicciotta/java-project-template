@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- DevEx: Normalize Windows and Unix script line endings and protect common binary assets from Git text conversion.
 - Docs: Explain common, library, and application Gradle conventions with explicit project mapping and module migration examples.
 - Build: Enable caching, all warnings, rich console output, and info logging; provide copyright metadata in Gradle properties.
 - DevEx: Share portable VS Code Java build synchronization settings while keeping other editor-local files ignored.
