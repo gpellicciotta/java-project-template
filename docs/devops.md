@@ -26,6 +26,12 @@ python scripts/bootstrap-dev-environment.py
 ```
 This initializes a git repo (if one doesn't already exist) and runs `gradlew build`.
 
+### VS Code Workspace Settings
+
+The shared [.vscode/settings.json](../.vscode/settings.json) enables automatic Java build configuration updates.
+Keep shared settings portable; configure machine-specific JDK paths and personal preferences in VS Code user settings.
+Other files and directories under `.vscode/` remain ignored by default, including in nested modules.
+
 ### Deploying a Service
 `scripts/deploy-to-production.py` is a scaffolded placeholder per the dev-guidelines scripts-directory
 convention. This template ships as a standalone CLI jar with no production service, so the script just

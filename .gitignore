@@ -16,7 +16,9 @@ __pycache__/
 .idea/dataSources.local.xml
 .idea/shelf/
 .idea/sonarlint/
-.vscode/
+# Share portable VS Code settings; ignore other editor-local files.
+**/.vscode/*
+!**/.vscode/settings.json
 *.iml
 
 # Task worktrees (git worktree add ./work/Tnnnn-slug)
