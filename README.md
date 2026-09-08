@@ -6,7 +6,7 @@ Includes JUnit 5 Jupiter for testing, the Gradle wrapper (pinned Gradle + JDK to
 
 ## Directory Layout
 
-```
+```text
 java-template-project/
   src/
     main/java/myproject/
@@ -148,7 +148,8 @@ To do it by hand instead: copy this folder, then rename every occurrence of the 
 - `src/main/java/myproject/` and `src/test/java/myproject/` → `src/main/java/<your_package_name>/` and `src/test/java/<your_package_name>/` (and every `package myproject;`/`import myproject...` line inside them)
 - `settings.gradle`'s `rootProject.name = 'template-project'`
 - This README's title, and `CLAUDE.md`'s placeholder sections
-- `CHANGELOG.md` — replace the version history with your project's initial entry
-- `gradle.properties`'s `version` — reset to `0.0.1` (or your own starting point)
+- `CHANGELOG.md` — replace the version history with your project's initial `## v0.1.0-pre` entry
+- `gradle.properties`'s `version` — reset to `0.1.0-pre`
+- `TODO.md` — reset `**Next ID:**` to `0001` and initialize empty `## Next Milestone` and `## Backlog` sections
 
 Then follow **Quick Start** above to verify the rename didn't break anything before writing real code.

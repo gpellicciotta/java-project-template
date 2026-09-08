@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -176,7 +177,6 @@ class CliTest
     assertTrue(buildGradle.contains("mainClass = 'sample_app.Cli'"));
 
     String gradleProperties = Files.readString(destination.resolve("gradle.properties"), StandardCharsets.UTF_8);
-    assertTrue(gradleProperties.contains("version=0.0.1"));
 
     String readme = Files.readString(destination.resolve("README.md"), StandardCharsets.UTF_8);
     assertTrue(readme.contains("Sample App"));
@@ -187,8 +187,17 @@ class CliTest
     assertTrue(changelog.contains("Initial release of the Sample App project."));
 
     String todo = Files.readString(destination.resolve("TODO.md"), StandardCharsets.UTF_8);
-    assertTrue(todo.contains("## Next Milestone"));
-    assertTrue(todo.contains("### Backlog"));
+    assertAll("fresh project metadata",
+        () -> assertEquals(List.of("version=0.1.0-pre"),
+            gradleProperties.lines().filter(line -> line.startsWith("version=")).toList()),
+        () -> assertEquals(List.of("## v0.1.0-pre"),
+            changelog.lines().filter(line -> line.startsWith("## ")).toList()),
+        () -> assertFalse(changelog.contains("[in development]")),
+        () -> assertEquals(List.of("**Next ID:** 0001"),
+            todo.lines().filter(line -> line.startsWith("**Next ID:**")).toList()),
+        () -> assertEquals(List.of("## Next Milestone", "## Backlog"),
+            todo.lines().filter(line -> line.startsWith("##")).toList()),
+        () -> assertEquals(2L, todo.lines().filter(line -> line.equals("*(Currently no tasks)*")).count()));
 
     assertTrue(Files.isRegularFile(destination.resolve("docs/index.md")));
     assertTrue(Files.isRegularFile(destination.resolve("docs/requirements.md")));

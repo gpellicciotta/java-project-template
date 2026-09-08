@@ -28,6 +28,8 @@ public final class Scaffold
   static final String REPO_SLUG = "java-template-project";
   static final String TITLE_PLACEHOLDER = "Java Template Project";
 
+  private static final String INITIAL_VERSION = "0.1.0-pre";
+
   private static final List<String> MARKER_FILES = List.of("build.gradle", "TODO.md", "CHANGELOG.md");
   private static final Set<String> EXCLUDED_NAMES = Set.of(
       ".git", ".gradle", "build", "out", ".idea", ".vscode", "work", "__pycache__"
@@ -155,13 +157,13 @@ public final class Scaffold
         + "A summarized overview of all changes, per version of this project.\n\n"
         + "> Entries will be added in reverse chronological order, so with the most recent at the top.\n"
         + ">\n"
-        + "> Status codes used are:\n"
-        + "> - `[in development]` - actively being developed\n"
+        + "> An active development version carries a `-pre` suffix in this heading and `gradle.properties`.\n"
+        + "> On release, the suffix is replaced with a status tag:\n"
         + "> - `[{{date}}]` - frozen/finalized on {{date}}\n"
         + "> - `[released: {{date}}]` - released to package manager or production on {{date}}\n"
         + "> - `[broken]` - considered broken and not be used\n\n"
         + "---\n\n"
-        + "## v0.1.0 [in development]\n"
+        + "## v" + INITIAL_VERSION + "\n\n"
         + "- Initial release of the " + title + " project.\n";
     try {
       Files.writeString(destination.resolve("CHANGELOG.md"), content, StandardCharsets.UTF_8);
@@ -178,13 +180,14 @@ public final class Scaffold
         + ">\n"
         + "> Status: `[ ]` available · `[~]` active · `[!]` blocked · `[?]` needs-review\n"
         + "> Owner: `@name` shown only when active/blocked/needs-review.\n"
-        + "> Dependencies: `(needs Tnnnn)` shown only when unresolved.\n\n"
+        + "> Dependencies: `[needs: Tnnnn]` shown only when unresolved.\n\n"
+        + "**Next ID:** 0001\n\n"
         + "---\n\n"
         + "## Next Milestone\n\n"
-        + "*(no active tasks)*\n\n"
+        + "*(Currently no tasks)*\n\n"
         + "---\n\n"
-        + "### Backlog\n\n"
-        + "*(no backlog items yet)*\n";
+        + "## Backlog\n\n"
+        + "*(Currently no tasks)*\n";
     try {
       Files.writeString(destination.resolve("TODO.md"), content, StandardCharsets.UTF_8);
     } catch (IOException e) {
@@ -196,7 +199,7 @@ public final class Scaffold
     Path gradleProperties = destination.resolve("gradle.properties");
     try {
       String text = Files.readString(gradleProperties, StandardCharsets.UTF_8);
-      String newText = text.replaceFirst("(?m)^version\\s*=\\s*.*$", "version=0.0.1");
+      String newText = text.replaceFirst("(?m)^version\\s*=\\s*.*$", "version=" + INITIAL_VERSION);
       Files.writeString(gradleProperties, newText, StandardCharsets.UTF_8);
     } catch (IOException e) {
       throw new ScaffoldException("Failed to reset gradle.properties's version: " + e.getMessage());

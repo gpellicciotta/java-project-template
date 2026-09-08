@@ -99,6 +99,9 @@ Task weight depends on isolation and tracking needs:
 
 ## Scaffolding a New Project
 
+Generated projects start at `0.1.0-pre` in `gradle.properties`, with a matching `## v0.1.0-pre` changelog heading.
+Their fresh `TODO.md` starts with `**Next ID:** 0001` and empty Next Milestone and Backlog sections.
+
 To create a new project from this template:
 ```powershell
 # Using the CLI

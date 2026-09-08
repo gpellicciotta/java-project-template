@@ -28,7 +28,9 @@ Functional and technical requirements for the `java-project-template` project.
 - Ensure core business logic remains independent of console streams, exit calls, or CLI frameworks for seamless unit testing.
 
 ### Project Scaffolding
-- Automate repository renaming, directory structure restructuring, package name rewriting, and reset of version history (`CHANGELOG.md`, `TODO.md`, and `build.gradle`'s version).
+- Automate repository renaming, package restructuring, and fresh metadata in `CHANGELOG.md`, `TODO.md`, and `gradle.properties`.
+- Initialize `gradle.properties` at `0.1.0-pre`, with a matching `## v0.1.0-pre` changelog heading.
+- Initialize TODO metadata with `**Next ID:** 0001` and empty peer-level Next Milestone and Backlog sections.
 - Prevent accidental overwrite when target directories already exist.
 
 ### Logging
