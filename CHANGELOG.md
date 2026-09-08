@@ -13,6 +13,8 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v1.1.1-pre
+
+- Build: Generate source and Javadoc archives by default and preserve them in shared multi-project conventions.
 - Build: `doFullRelease` now atomically bumps `gradle.properties` and opens the next `-pre` CHANGELOG heading after tagging.
 
 ## v1.1.0 [released: 2026-09-07]

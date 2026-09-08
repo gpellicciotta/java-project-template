@@ -4,7 +4,7 @@ Practical guidance on building, testing, developing, and releasing for `java-pro
 
 ---
 
-## 1. Prerequisites and Environment
+## Prerequisites and Environment
 
 - **JDK**: Java 25 (auto-provisioned by Gradle toolchain if not present locally).
 - **Gradle**: Gradle 9.x (managed via the included Gradle wrapper `./gradlew` / `gradlew.bat`).
@@ -17,27 +17,27 @@ Practical guidance on building, testing, developing, and releasing for `java-pro
 
 ---
 
-## 2. Development Workflows
+## Development Workflows
 
-### 2.1. Initial Bootstrap
+### Initial Bootstrap
 Clone the repository and run the bootstrap script:
 ```shell
 python scripts/bootstrap-dev-environment.py
 ```
 This initializes a git repo (if one doesn't already exist) and runs `gradlew build`.
 
-### 2.2. Deploying a Service
+### Deploying a Service
 `scripts/deploy-to-production.py` is a scaffolded placeholder per the dev-guidelines scripts-directory
 convention. This template ships as a standalone CLI jar with no production service, so the script just
 prints guidance; projects derived from this template that deploy a service should replace its body with
 their real deployment steps.
 
-### 2.3. Building and Testing
+### Building and Testing
 ```powershell
 # Run tests only
 .\gradlew.bat test
 
-# Full compile, test, and jar assembly
+# Full compile, test, and assembly of application, source, and Javadoc jars
 .\gradlew.bat build
 
 # Run application during development
@@ -45,7 +45,10 @@ their real deployment steps.
 .\gradlew.bat run --args="greet Gio"
 ```
 
-### 2.4. Task Coordination Protocol
+The build writes the main jar, `-sources.jar`, and `-javadoc.jar` to `build/libs/`.
+Run `sourcesJar` or `javadocJar` to generate either companion archive individually.
+
+### Task Coordination Protocol
 All task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md).
 Task weight depends on isolation and tracking needs:
 - **Full task (`Tnnnn`)**: needs a branch/worktree, a dedicated plan, or progress tracking.
@@ -60,7 +63,7 @@ Task weight depends on isolation and tracking needs:
 
 ---
 
-## 3. Scaffolding a New Project
+## Scaffolding a New Project
 
 To create a new project from this template:
 ```powershell
@@ -73,7 +76,7 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
 
 ---
 
-## 4. Release Process
+## Release Process
 
 1. Choose the next semantic version and update `version` in `gradle.properties` (the single source of truth for
    the jar manifest and distribution), keeping its `-pre` suffix.
@@ -102,9 +105,8 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
 
 ---
 
-## 5. Continuous Integration
+## Continuous Integration
 
 The GitHub Actions workflow in `.github/workflows/ci.yml` triggers on push and pull requests, executing:
 - Java JDK 25 setup.
 - `./gradlew build` (compilation, unit testing, packaging, and a Spotless formatting check via `check`).
-

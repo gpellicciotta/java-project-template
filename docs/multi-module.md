@@ -23,7 +23,7 @@ repositories {
 ```
 
 `buildSrc/src/main/groovy/<group>.java-common-conventions.gradle` — everything every subproject needs
-(repositories, the JUnit dependencies, the toolchain block, `useJUnitPlatform()`):
+(repositories, the JUnit dependencies, the toolchain, source and Javadoc archives, `useJUnitPlatform()`):
 
 ```groovy
 plugins {
@@ -44,6 +44,8 @@ java {
   toolchain {
     languageVersion = JavaLanguageVersion.of(25)
   }
+  withJavadocJar()
+  withSourcesJar()
 }
 
 test {
@@ -63,6 +65,9 @@ plugins {
 
 (A `<group>.java-library-conventions.gradle` variant applying `java-library` instead of `application` covers
 subprojects that are libraries other subprojects depend on.)
+
+The common convention preserves the template's source and Javadoc archives for every Java subproject.
+Each subproject's `build` produces `-sources.jar` and `-javadoc.jar` alongside its main jar in its `build/libs/` directory.
 
 Each subproject's own `build.gradle` then shrinks to just `apply plugin: '<group>.java-application-conventions'`
 plus whatever's actually specific to that subproject — its own dependencies, its own `mainClass`. The shared

@@ -15,7 +15,6 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [~] T0020 [owner: @codex] Enable source and Javadoc archives in the template and shared multi-project conventions.
 - [ ] T0021 Decide whether to configure the javadoc task with HTML5 output and '-Xdoclint:none' / '-quiet': all three real projects independently share this exact configuration, while the template has no javadoc block. **[Decided]**: Yes
 - [ ] T0022 Decide whether to replace the blanket .vscode/ ignore in .gitignore with a selective pattern and track shared settings.json: all three real projects commit .vscode/settings.json, but the template's .gitignore blanket-ignores it. **[Decided]**: Yes
 - [ ] T0023 Decide whether to add standard Gradle flags (caching, warning.mode, console, logging.level=info) and copyright to gradle.properties: all three real projects set logging.level=info and two configure build caching. **[Decided]**: Yes

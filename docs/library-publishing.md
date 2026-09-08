@@ -7,8 +7,8 @@ projects (e.g. `hinolugi-support.java`, consumed by `hinolugi-auth`).
 
 ## The pattern, once you need it
 
-Apply `maven-publish` alongside (or instead of) `application`, and switch `java` to a library-shaped
-publication with sources and Javadoc jars:
+Apply `maven-publish` alongside (or instead of) `application`, and configure a library publication.
+Retain the template's existing source and Javadoc archive configuration:
 
 ```groovy
 plugins {
@@ -45,8 +45,8 @@ publishing {
 
 Notes:
 
-- `withJavadocJar()` / `withSourcesJar()` produce the extra `-javadoc.jar` / `-sources.jar` artifacts consumers'
-  IDEs expect; omit them only for internal-only publications where that convenience doesn't matter.
+- The template already enables `withJavadocJar()` and `withSourcesJar()`; `from components.java` includes both
+  companion archives in the publication.
 - The GitHub Packages repository block above is a template — swap in your own `<owner>/<repo>`, and never
   commit real credentials; read them from Gradle properties or environment variables as shown.
 - Publishing to a GitHub Packages repository that is private requires consumers to authenticate too (a PAT
