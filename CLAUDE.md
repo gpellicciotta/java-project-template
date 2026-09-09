@@ -11,15 +11,20 @@ change doesn't casually cross them.
 
 ## Commands
 
-Windows shell; `gradlew.bat` (POSIX shells use `./gradlew`). The Gradle wrapper pins the exact Gradle version;
-`build.gradle`'s `java.toolchain` pins the exact JDK version (auto-provisioned by Gradle if not already
-installed) — there is no separate environment bootstrap step to run first, unlike a Python venv.
+Use `.\gradlew.bat` in Windows PowerShell; use `./gradlew` in POSIX shells.
+The Gradle wrapper pins Gradle; `build.gradle`'s `java.toolchain` pins the JDK, which Gradle can provision automatically.
+The cross-platform bootstrap requires Python 3 and Git and runs the wrapper's full build.
+See [environment prerequisites](docs/devops.md#prerequisites-and-environment) for required GitHub Packages access.
 
-- One-shot bootstrap: `. .\setup.ps1` (git init if needed, then `gradlew build`)
-- Build + test + jar: `gradlew build`
-- Run the CLI: `gradlew run --args="<command> [args]"` — or `java -jar build/libs/<name>-<version>.jar <command> [args]` after `gradlew build`
-- Run the test suite only: `gradlew test`
+- One-shot bootstrap: `python scripts/bootstrap-dev-environment.py` initializes Git when needed and runs the full Gradle build.
+- Build + test + jar: `.\gradlew.bat build`
+- Run the CLI: `.\gradlew.bat run --args="<command> [args]"` or `java -jar build/libs/<name>-<version>.jar <command> [args]` after building.
+- Run the test suite only: `.\gradlew.bat test`
+- Deployment placeholder: `python scripts/deploy-to-production.py` prints guidance and exits with code 1; this template has no production service.
 - **[TODO]** Add any other project-specific commands here.
+
+Projects that deploy a service must replace the deployment script's body with their actual deployment steps.
+See the [development workflows](docs/devops.md#development-workflows) for bootstrap, build, and deployment details.
 
 ## Architecture
 
@@ -43,16 +48,16 @@ These apply to every project scaffolded from this template, not just this one:
   for at that point.
 - Minimize third-party dependencies. The JDK and JUnit are enough to start; add a dependency only when it
   earns its ongoing maintenance cost.
-- Make it easy to get started: a clone + `. .\setup.ps1` (or `gradlew build`) should be enough to get a
-  passing build with tests run — no undocumented setup steps.
+- Keep prerequisites documented so cloning and running `python scripts/bootstrap-dev-environment.py` produces a passing build with tests.
 - Use a `java.toolchain` block (not `sourceCompatibility`/`targetCompatibility`) to pin the JDK version — it
   decouples the JDK compiling the code from whatever JDK happens to run Gradle, and compiles with `--release`
   semantics so use of APIs newer than the target is caught at build time, not at runtime on an older JDK.
 
 ## Conventions
 
-- `CHANGELOG.md` (top-level) tracks version history: bump `build.gradle`'s `version` for every user-facing
-  change and add a matching dated entry to `CHANGELOG.md` with the same version number.
+- `gradle.properties` defines the authoritative `version`; keep it aligned with the active `-pre` heading in `CHANGELOG.md`.
+  Record user-facing changes under that heading and preserve finalized release sections.
+  Release automation finalizes the current section and opens the next patch development version; see [release procedures](docs/devops.md#release-process).
 - `TODO.md` (top-level) is the milestone-based task index. Follow the claim and worktree protocol defined in
   `coordinating-work-guidelines.md`.
 - `CHANGELOG.md`, `TODO.md`, `LICENSE.md`, and `README.md` live at the repo root.
@@ -66,7 +71,7 @@ These apply to every project scaffolded from this template, not just this one:
   don't let it drift from these numbers.
 - The version is stamped into the jar manifest (`build.gradle`'s `jar { manifest { ... } }`) and read back at
   runtime via `Package.getImplementationVersion()` (`Cli.java`'s `version()`, with a `"0.0.0+unknown"` fallback
-  for when running from compiled classes rather than a jar, e.g. `gradlew run` or the test suite) rather than
-  hardcoded, so `build.gradle`'s `version` stays the single source of truth.
+  for when running from compiled classes rather than a jar, e.g. `.\gradlew.bat run` or the test suite).
+  `gradle.properties` supplies the base version; `build.gradle` appends Git commit metadata dynamically when available.
 - **[TODO]** Add project-specific invariants/conventions here as they emerge — things a future change must not
   casually break.

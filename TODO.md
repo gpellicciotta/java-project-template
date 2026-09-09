@@ -9,16 +9,17 @@ An overview of all tasks and their planning.
 > Owner: `[owner: @name]` shown only when active/blocked/needs-review.
 > Dependencies: `[needs: Tnnnn]` shown only when unresolved.
 
-**Next ID:** 0030
+**Next ID:** 0032
 
 ---
 
 ## Next Milestone
 
-- [~] T0029 [owner: @codex] Update CLAUDE.md to document Python bootstrap, deployment placeholder, and authoritative version metadata.
+*(Currently no tasks)*
 
 ---
 
-### Backlog
+## Backlog
 
-*(Currently no tasks)*
+- [ ] A0030 Correct stale version metadata references in README.md and CLI scaffolding help.
+- [ ] A0031 Recognize linked-worktree Git files in bootstrap repository detection to avoid unnecessary repository initialization.

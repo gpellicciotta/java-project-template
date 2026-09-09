@@ -5,7 +5,7 @@ A summarized overview of all changes, per version of this project.
 > Entries will be added in reverse chronological order, so with the most recent at the top.
 >
 > An active in-development version carries a `-pre` suffix (e.g. `v1.0.1-pre`) on both this heading and
-> `build.gradle`'s `version`. On release, the suffix is replaced with a status tag:
+> `gradle.properties`'s `version`. On release, the suffix is replaced with a status tag:
 > - `[{{date}}]` - frozen/finalized on {{date}}
 > - `[released: {{date}}]` - released to package manager or production on {{date}}
 > - `[broken]` - considered broken and not be used
@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- Docs: Update Claude guidance for Python bootstrap, deployment placeholder behavior, and version ownership in Gradle properties.
 - Build: Stamp application JAR manifests with UTC build timestamps and document archive reproducibility implications.
 - DevEx: Ignore environment secret files and bin compiler output throughout generated projects.
 - CLI: Initialize scaffolded projects at `0.1.0-pre` with matching changelogs, task counters, and standard empty task sections.
