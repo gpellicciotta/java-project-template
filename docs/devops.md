@@ -32,6 +32,13 @@ The shared [.vscode/settings.json](../.vscode/settings.json) enables automatic J
 Keep shared settings portable; configure machine-specific JDK paths and personal preferences in VS Code user settings.
 Other files and directories under `.vscode/` remain ignored by default, including in nested modules.
 
+### Local Environment Files and Compiler Output
+
+[.gitignore](../.gitignore) excludes `.env`, `**/*.env`, and `bin/` at the root and within nested modules.
+These patterns cover local environment secrets, named files such as `production.env`, and compiler output directories.
+Sanitized examples such as `.env.example` remain trackable; exclude real credentials from examples.
+Ignore rules do not remove files already tracked by Git.
+
 ### Line Endings and Binary Assets
 
 [.gitattributes](../.gitattributes) normalizes text to LF in Git and checks out `.bat` and `.cmd` scripts with CRLF.
