@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] T0028 Decide whether the jar manifest should stamp 'Build-Time' by default: all three real projects stamp Build-Time in their manifests, but doing so compromises Gradle build-cache reproducibility for the jar task. **[Decided]**: Yes
+- [~] T0028 [owner: @codex] Stamp Build-Time in the JAR manifest by default and document reproducibility implications.
 - [ ] T0029 Decide whether to update CLAUDE.md to remove stale references to setup.ps1 and build.gradle's version, documenting scripts/bootstrap-dev-environment.py and deploy-to-production.py instead. **[Decided]**: Yes
 
 ---
