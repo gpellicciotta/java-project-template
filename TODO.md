@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [ ] T0029 Decide whether to update CLAUDE.md to remove stale references to setup.ps1 and build.gradle's version, documenting scripts/bootstrap-dev-environment.py and deploy-to-production.py instead. **[Decided]**: Yes
+- [~] T0029 [owner: @codex] Update CLAUDE.md to document Python bootstrap, deployment placeholder, and authoritative version metadata.
 
 ---
 
