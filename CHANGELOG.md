@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- Build: Stamp application JAR manifests with UTC build timestamps and document archive reproducibility implications.
 - DevEx: Ignore environment secret files and bin compiler output throughout generated projects.
 - CLI: Initialize scaffolded projects at `0.1.0-pre` with matching changelogs, task counters, and standard empty task sections.
 - DevEx: Normalize Windows and Unix script line endings and protect common binary assets from Git text conversion.

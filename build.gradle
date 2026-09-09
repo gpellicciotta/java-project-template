@@ -100,7 +100,9 @@ jar {
       'Main-Class':              application.mainClass.get(),
       'Implementation-Title':    project.name,
       'Implementation-Version':  implementationVersion,
-      'Implementation-Vendor':   project.ext.vendor
+      'Implementation-Vendor':   project.ext.vendor,
+      // Deliberately changes on each configuration: prefer build traceability over identical JAR bytes.
+      'Build-Time':              java.time.Instant.now().toString()
     )
   }
 }

@@ -51,6 +51,8 @@ Functional and technical requirements for the `java-project-template` project.
 - **Ownership Metadata**: Declare author and a literal copyright notice in `gradle.properties` for derived projects.
 - **Testing**: JUnit 5 Jupiter test framework with JUnit platform launcher.
 - **Packaging**: Standard application plugin configuration generating runnable jar archives with manifest attributes (`Main-Class`, `Implementation-Title`, `Implementation-Version`, `Implementation-Vendor`).
+- **Build Timestamp**: Stamp the application JAR with `Build-Time` as an ISO-8601 UTC configuration timestamp by default.
+- **Reproducibility Tradeoff**: Accept changing application archives and repeated packaging while preserving caching for other eligible tasks.
 - **Companion Archives**: Generate source and Javadoc jars during `build`, including subprojects using the documented common convention.
 - **Javadoc**: Generate HTML5 documentation with doclint disabled and quiet output; retain failure on Javadoc errors.
 - **Code Standards**: 2-space indentation, UTF-8 encoding, US English, and LF line endings except CRLF for `.bat` and `.cmd` scripts.

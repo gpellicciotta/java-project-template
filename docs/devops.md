@@ -89,6 +89,21 @@ Run `sourcesJar` or `javadocJar` to generate either companion archive individual
 Javadoc explicitly uses HTML5 output with `-Xdoclint:none` and `-quiet`.
 This disables documentation lint diagnostics and suppresses generation progress messages; Javadoc errors still fail the build.
 
+### JAR Build Timestamp
+
+The application JAR manifest includes `Build-Time` by default, formatted as an ISO-8601 UTC instant ending in `Z`.
+The value records when Gradle configures the manifest, rather than when compilation or packaging finishes.
+Source and Javadoc JARs do not receive this attribute.
+
+This deliberately favors build traceability over byte-for-byte reproducibility.
+Each fresh configuration changes the manifest input, causing `jar` to execute again even when source code is unchanged.
+Distributions containing that JAR also change.
+Gradle does not cache `Jar` tasks by default; enabling caching explicitly would still encounter changing timestamp inputs.
+Compilation and other eligible tasks retain their normal incremental and build-cache behavior.
+Derived projects requiring reproducible archives should remove the `Build-Time` attribute or replace it with a fixed release value.
+See Gradle's [incremental build](https://docs.gradle.org/current/userguide/incremental_build.html) and
+[build cache](https://docs.gradle.org/current/userguide/build_cache.html) documentation.
+
 ### Task Coordination Protocol
 All task work follows the protocol in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md).
 Task weight depends on isolation and tracking needs:
