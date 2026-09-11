@@ -12,6 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
+## v1.2.1-pre
+
 ## v1.2.0 [released: 2026-09-11]
 
 - DevEx: Recognize linked worktree Git files in bootstrap repository detection to avoid redundant repository initialization.
