@@ -55,6 +55,29 @@ convention. This template ships as a standalone CLI jar with no production servi
 prints guidance; projects derived from this template that deploy a service should replace its body with
 their real deployment steps.
 
+### Creating a Release with `create-github-release.py`
+
+The `scripts/create-github-release.py` script automates the complete release process end-to-end:
+
+1. Validates preconditions (clean working tree, branch is `master` or `main`, `gh` CLI installed and authenticated, no existing remote tag or release).
+2. Runs pre-flight quality checks (`spotlessCheck`, `test`, `build`).
+3. Extracts release notes for the target version from `CHANGELOG.md`.
+4. Finalizes the version in `gradle.properties` and `CHANGELOG.md` (removing `-pre` and stamping the release date).
+5. Commits the finalized release files and creates the git tag (`v<version>`).
+6. Pushes the commit and tag to GitHub and creates the GitHub release.
+7. Opens the next patch development version (`-pre`) in `gradle.properties` and `CHANGELOG.md` in a follow-up commit.
+
+```shell
+# Preview the release actions without making changes
+python scripts/create-github-release.py --dry-run
+
+# Create and publish the release
+python scripts/create-github-release.py release
+
+# Create and publish while skipping pre-flight checks
+python scripts/create-github-release.py release --skip-checks
+```
+
 ### Building and Testing
 
 The root [gradle.properties](../gradle.properties) defines shared build defaults:
@@ -137,30 +160,53 @@ java -jar build/libs/template-project-<version>.jar create my-new-tool -o C:\Dev
 
 ## Release Process
 
-1. Choose the next semantic version and update `version` in `gradle.properties` (the single source of truth for
-   the jar manifest and distribution), keeping its `-pre` suffix.
-2. Add or update the corresponding `-pre` entry at the top of `CHANGELOG.md`.
-3. Commit and push that work to `master` — `doFullRelease` (below) refuses to run against an unclean tree.
-4. Run the full release pipeline:
-   ```powershell
-   .\gradlew.bat doFullRelease
-   ```
-   This runs `build` (compile, Spotless, tests), then in order:
-   - `checkChangelogUpToDate` - fails if the tree is dirty, `version` has no `-pre` suffix, or `CHANGELOG.md`
-     has no matching un-released heading.
-   - `publishReleaseArtifacts` - runs `publishMavenPublicationToGithubPackagesRepository` if this project has
-     opted into `maven-publish` per `docs/library-publishing.md`; otherwise a no-op (this template ships as an
-     application, not a library, so nothing is published by default).
-   - `markChangelogReleased` - replaces the CHANGELOG's `-pre` suffix with `[released: <date>]` and commits it.
-   - `tagAndPushRelease` - tags the release commit `v<version>` and pushes the branch and tag to `origin`.
-   - `createGithubRelease` - runs `gh release create` for the new tag, using the CHANGELOG section as notes
-     (requires the [GitHub CLI](https://cli.github.com/) installed and authenticated via `gh auth login`).
-   - `openNextPreRelease` - bumps `gradle.properties` to the next patch `-pre` version, opens a matching
-     `CHANGELOG.md` heading, and commits and pushes — so the tree is ready for further development with no
-     manual follow-up step.
+Ongoing work accumulates under the top `CHANGELOG.md` heading while it carries a `-pre` SemVer suffix (e.g.
+`## v1.1.1-pre`), which must always match `version` in `gradle.properties` (the single source of truth) exactly,
+`-pre` included.
 
-   Any individual step can also be run on its own (e.g. `.\gradlew.bat checkChangelogUpToDate`) to diagnose or
-   resume a failed release without repeating the steps already done.
+### Automated Release with `create-github-release.py`
+
+Use `scripts/create-github-release.py` to automate the complete release flow:
+
+```shell
+# Validate and preview release actions
+python scripts/create-github-release.py release --dry-run
+
+# Run automated release
+python scripts/create-github-release.py release
+```
+
+The script performs the following operations:
+- Verifies a clean working tree and checks that the `gh` CLI is available.
+- Extracts release notes from `CHANGELOG.md` for the current version.
+- Finalizes the `-pre` heading in `CHANGELOG.md` and strips `-pre` in `gradle.properties`.
+- Commits the finalized files and tags the release.
+- Pushes the mainline branch and tag to `origin`.
+- Creates a GitHub release using `gh release create` with the extracted release notes.
+- Opens the next development version in `CHANGELOG.md` and `gradle.properties`, then commits and pushes.
+
+### Gradle `doFullRelease` Pipeline
+
+Alternatively, run the Gradle-native release pipeline:
+```powershell
+.\gradlew.bat doFullRelease
+```
+This runs `build` (compile, Spotless, tests), then in order:
+- `checkChangelogUpToDate` - fails if the tree is dirty, `version` has no `-pre` suffix, or `CHANGELOG.md`
+  has no matching un-released heading.
+- `publishReleaseArtifacts` - runs `publishMavenPublicationToGithubPackagesRepository` if this project has
+  opted into `maven-publish` per `docs/library-publishing.md`; otherwise a no-op (this template ships as an
+  application, not a library, so nothing is published by default).
+- `markChangelogReleased` - replaces the CHANGELOG's `-pre` suffix with `[released: <date>]` and commits it.
+- `tagAndPushRelease` - tags the release commit `v<version>` and pushes the branch and tag to `origin`.
+- `createGithubRelease` - runs `gh release create` for the new tag, using the CHANGELOG section as notes
+  (requires the [GitHub CLI](https://cli.github.com/) installed and authenticated via `gh auth login`).
+- `openNextPreRelease` - bumps `gradle.properties` to the next patch `-pre` version, opens a matching
+  `CHANGELOG.md` heading, and commits and pushes — so the tree is ready for further development with no
+  manual follow-up step.
+
+Any individual step can also be run on its own (e.g. `.\gradlew.bat checkChangelogUpToDate`) to diagnose or
+resume a failed release without repeating the steps already done.
 
 ---
 
