@@ -60,7 +60,7 @@ public final class Cli
       sb.append("details:\n");
       sb.append("  create:\n");
       sb.append("    Copies this template tree to <dir>/<project-name>, updates package declarations,\n");
-      sb.append("    resets CHANGELOG.md and TODO.md, and initializes a fresh build.gradle version.\n\n");
+      sb.append("    resets CHANGELOG.md and TODO.md, and initializes a fresh gradle.properties version.\n\n");
     }
     sb.append("exit codes:\n");
     sb.append("  0  Success (including help and version display)\n");

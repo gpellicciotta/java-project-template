@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- Docs: Correct stale version metadata references in README.md and CLI scaffolding help.
 - DevEx: Add GitHub release script to automate quality checks, tagging, publishing, and next-version bump.
 - Docs: Update Claude guidance for Python bootstrap, deployment placeholder behavior, and version ownership in Gradle properties.
 - Build: Stamp application JAR manifests with UTC build timestamps and document archive reproducibility implications.

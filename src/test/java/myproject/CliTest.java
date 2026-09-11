@@ -60,6 +60,7 @@ class CliTest
     String out = runAndCaptureOut("help", "--verbose");
     assertTrue(out.contains("details:"));
     assertTrue(out.contains("create:"));
+    assertTrue(out.contains("gradle.properties"));
   }
 
   @Test

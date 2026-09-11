@@ -42,7 +42,8 @@ java-template-project/
   LICENSE.md                # project license
   CHANGELOG.md              # versioned changes in reverse chronological order
   TODO.md                   # milestone-based task tracking
-  build.gradle              # project metadata, version, JDK toolchain, JUnit 5, application plugin, jar manifest
+  build.gradle              # JDK toolchain, JUnit 5, application plugin, jar manifest
+  gradle.properties         # group, version, author, copyright, and build settings
   settings.gradle           # rootProject.name
   .gitignore
   .editorconfig             # indent/charset/line-ending settings
@@ -120,7 +121,7 @@ The jar (with its version stamped into the manifest) lands in `build/libs/`.
 
 ## Releasing a Version
 
-1. Choose the next semantic version, then update `version` in `build.gradle`. This is the single source of truth used for the jar name and manifest.
+1. Choose the next semantic version, then update `version` in `gradle.properties`. This is the single source of truth used for the jar name and manifest.
 2. Add a dated entry for that version at the top of `CHANGELOG.md`.
 3. Run the full verification and build:
 
@@ -131,7 +132,7 @@ The jar (with its version stamped into the manifest) lands in `build/libs/`.
 4. Commit the changes and create a matching annotated tag:
 
   ```powershell
-  git add build.gradle CHANGELOG.md README.md
+  git add gradle.properties CHANGELOG.md README.md
   git commit -m "Release v<version>"
   git tag -a v<version> -m "Release v<version>"
   git push origin HEAD --follow-tags
