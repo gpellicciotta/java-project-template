@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.1.1-pre
 
+- DevEx: Recognize linked worktree Git files in bootstrap repository detection to avoid redundant repository initialization.
 - Docs: Correct stale version metadata references in README.md and CLI scaffolding help.
 - DevEx: Add GitHub release script to automate quality checks, tagging, publishing, and next-version bump.
 - Docs: Update Claude guidance for Python bootstrap, deployment placeholder behavior, and version ownership in Gradle properties.

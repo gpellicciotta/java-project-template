@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
-    if not (ROOT / ".git").is_dir():
+    if not (ROOT / ".git").exists():
         subprocess.run(["git", "init"], cwd=ROOT, check=True)
 
     gradlew = ROOT / ("gradlew.bat" if sys.platform == "win32" else "gradlew")
