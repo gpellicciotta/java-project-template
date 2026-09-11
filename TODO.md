@@ -15,7 +15,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 
-- [~] A0033 [owner: @gemini] Make a v1.2.0 release while using the new scripts/create-github-release.py. Then monitor Github to make sure all actions end correctly.
+*(Currently no tasks)*
 
 ---
 
